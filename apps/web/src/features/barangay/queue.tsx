@@ -1,6 +1,6 @@
 "use client";
 
-import { AlarmClock, ArrowUpRight, Info, ListOrdered, Loader2, Play, Sparkles, UserPlus } from "lucide-react";
+import { AlarmClock, ArrowUpRight, CircleHelp, Info, ListOrdered, Loader2, Play, Sparkles, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useMemo, useState } from "react";
@@ -226,11 +226,12 @@ export function WorkQueue() {
             {working.map((r) => (
               <li key={r.id}>
                 <Link href={`/barangay/cases/${r.id}`} className="flex items-center gap-3 rounded-2xl bg-card p-3.5 shadow-sheet transition hover:shadow-lift">
-                  <CategoryIcon category={r.triage!.category} size="sm" />
+                  {r.triage ? <CategoryIcon category={r.triage.category} size="sm" /> : <CircleHelp className="size-5 shrink-0 text-ink-3" aria-hidden />}
                   <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-2 text-[12px]">
+                    <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px]">
                       <span className="font-mono font-semibold">{r.ref}</span>
-                      <UrgencyTag urgency={r.triage!.urgency} lang={lang} className="h-5 text-[11px]" />
+                      {r.triage ? <UrgencyTag urgency={r.triage.urgency} lang={lang} className="h-5 text-[11px]" />
+                        : <span className="text-ink-3">{t("Triage not recorded")}</span>}
                     </span>
                     <span className="mt-0.5 block truncate text-[13.5px]">{r.redacted ? t("Restricted case") : r.text}</span>
                   </span>

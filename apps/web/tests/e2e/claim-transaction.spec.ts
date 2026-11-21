@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { expect, test } from "@playwright/test";
-import { localServices, staffAccount } from "./local-staff";
+import { localServices, staffAccount, staffSignIn } from "./local-staff";
 
 const handlerTeam = `test-queue-${randomUUID().slice(0, 8)}`;
 
@@ -38,4 +38,22 @@ test("two authenticated staff sessions cannot both claim one queue case", async 
   } finally {
     await Promise.allSettled([setup.end(), first.end(), second.end()]);
   }
+});
+
+test("an in-progress request without recorded triage remains visible in the work queue", async ({ page }) => {
+  const supervisor = await staffAccount("supervisor");
+  const { db } = localServices();
+  const id = randomUUID();
+  const ref = `UNTRIAGED-${id.slice(0, 8)}`;
+  await db.connect();
+  try {
+    await db.query("insert into public.service_requests(id,ref,channel,description,status,category) values($1,$2,'walkin','Synthetic transferred work','in_progress','infra')", [id, ref]);
+    await db.query("insert into public.case_work(request_id,team_id,started_at) values($1,'t_works',now())", [id]);
+  } finally { await db.end(); }
+  await page.setViewportSize({ width: 320, height: 844 });
+  await staffSignIn(page, supervisor, "/barangay/queue");
+  const card = page.getByRole("link", { name: new RegExp(ref, "u") });
+  await expect(card).toHaveAttribute("href", `/barangay/cases/${id}`);
+  await expect(card).toContainText("Triage not recorded");
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
 });

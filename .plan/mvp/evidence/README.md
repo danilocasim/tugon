@@ -41,4 +41,17 @@ Reviewed the four 390px reference and implementation pairs above. This is a stru
 
 The standalone Docker image passed 10 targeted Chromium scenarios against isolated Supabase. The public resident picker fit at 320px in both languages, with its sign-in link on one line. The resident account switch and report steps worked by keyboard. Staff opened the palette with `/`, typed into its focused search, and closed it with Escape. The staff and Tanod profile menus supported arrow keys and Enter for language selection. The Filipino roster date control updated a polite live region. Filipino staff and Tanod screens fit at 320, 390, and 768px. The same run verified the read-only handler view, desktop roster matrix, denied location fallback, retry without duplicate reports, offline fallback, and authorized printing.
 
-Device-specific VoiceOver and TalkBack, installed-PWA behavior on physical Android and iOS, matched-fixture comparisons of the remaining screen families, and product-owner acceptance are not signed off.
+### Additional role and screen comparisons
+
+Captured 18 more screen pairs in Chromium at 390 × 844 CSS pixels and checked that each page fit at both 320 and 390px. Sheets show the prototype above the implementation, scaled equally. Identity, locale, record count, and case status can differ between these independent synthetic fixtures.
+
+| Sheet | Screens from left to right | Review notes |
+| --- | --- | --- |
+| [Resident forms](./resident-forms-comparison.webp) | Sign-in, Account, report entry | The email-card and report-step hierarchy match. No demo email shortcut in the product. The report entry uses the resident's saved language. |
+| [Resident records](./resident-records-comparison.webp) | Privacy, Requests, Updates | Public notice retains the warning and section order. The product uses short staging copy and a reviewed deletion request instead of demo deletion. Requests and Updates show legitimate empty states for a newly enrolled account. |
+| [Staff entry and queues](./staff-entry-comparison.webp) | Sign-in, Intake inbox, Work queue | Replaced the demo persona chooser with real credentials and recovery. The queue preserves priority/actions and no longer fails when an in-progress request lacks recorded triage. |
+| [Staff work](./staff-work-comparison.webp) | Case detail, Insights, Incidents | Matched card order, metric grid, and incident empty state. The reports differ by category/status; the product also had closed incident fixtures. |
+| [Staff records](./staff-records-comparison.webp) | Monthly report, Lupon, Administration | The monthly preview and print action remain. Lupon is deliberately disabled; the existing A4 draft evidence validates authorized rendering separately. Administration uses wrapped mobile navigation and staff cards instead of clipping the prototype's table. |
+| [Tanod field work](./tanod-field-comparison.webp) | Sign-in, Assignment detail, History | Removed the demo officer chooser. The assignment card and progress strip match; the captured assignment status and availability of a map differ by fixture. |
+
+Remaining: matched fixtures for loaded resident details, receipt and service information; staff My cases, assisted intake, incident detail, and the enabled Lupon docket; physical Android/iOS PWA installation and screen reader testing; and formal product-owner acceptance.

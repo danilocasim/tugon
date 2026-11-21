@@ -299,6 +299,7 @@ const fil: Record<string, string> = {
   "Nothing waiting": "Walang naghihintay",
   "New cases appear here as soon as intake confirms them.": "Lalabas dito ang mga bagong kaso pagkakumpirma ng intake.",
   "In progress": "Inaaksyunan",
+  "Triage not recorded": "Walang naitalang triage",
   Start: "Simulan",
 
   // My cases
