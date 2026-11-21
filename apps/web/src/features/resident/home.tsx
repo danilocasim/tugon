@@ -194,7 +194,7 @@ export function ResidentHome() {
           <div className="-mt-2 flex flex-wrap items-center justify-between gap-3">
             <p className="min-w-0 flex-1 text-[14.5px] text-muted-foreground">
               {t("home.signedOut")}{" "}
-              <Link href="/resident/signin" className="font-semibold text-primary underline decoration-primary/30 underline-offset-4">
+              <Link href="/resident/signin" className="font-semibold whitespace-nowrap text-primary underline decoration-primary/30 underline-offset-4">
                 {t("nav.signin")}
               </Link>
             </p>

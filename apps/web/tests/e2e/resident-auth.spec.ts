@@ -13,6 +13,14 @@ test("email verification gates resident profile onboarding", async ({ page, requ
   const sessionCookie = (await page.context().cookies()).find((cookie) => cookie.name.startsWith("sb-"));
   expect(sessionCookie?.httpOnly).toBe(true);
   await expectPortalShell(page, { root: "/resident", landing: "/resident", navigation: "Main", current: /^Home$/u, secondary: /^Requests$/u });
+  await page.getByRole("link", { name: "Account", exact: true }).press("Enter");
+  await expect(page).toHaveURL(/\/resident\/account$/u);
+  const emailUpdates = page.getByRole("switch", { name: /Email me when there's an update/u });
+  await expect(emailUpdates).not.toBeChecked();
+  await emailUpdates.press("Space");
+  await expect(emailUpdates).toBeChecked();
+  await page.reload();
+  await expect(emailUpdates).toBeChecked();
 });
 
 test("mobile report retries the same receipt and protects its JPEG", async ({ page, browser, request }) => {
@@ -84,14 +92,16 @@ test("write-first reporting keeps category optional and does not persist a draft
   const note = `Synthetic write-first report ${randomUUID()} describes an issue without selecting a category.`;
   await page.getByRole("textbox", { name: "What happened, or what do you need?" }).fill(note);
   await expect(page.getByRole("button", { name: "Not sure", exact: true })).toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("radio", { name: "No", exact: true }).check();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  const safe = page.getByRole("radio", { name: "No", exact: true });
+  await safe.press("Space");
+  await expect(safe).toBeChecked();
+  await page.getByRole("button", { name: "Next", exact: true }).press("Enter");
   await page.getByLabel("Purok only").selectOption("P3");
   const persisted = await page.evaluate(() => JSON.stringify({ session: Object.entries(sessionStorage), local: Object.entries(localStorage) }));
   expect(persisted).not.toContain(note);
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).press("Enter");
   await expect(page.getByRole("heading", { name: "Add a photo" })).toBeVisible();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).press("Enter");
   await expect(page.getByRole("heading", { name: "Check before sending" })).toBeVisible();
   await page.getByRole("button", { name: "Send report" }).click();
   await expect(page.getByRole("heading", { name: "Your report was received" })).toBeVisible();

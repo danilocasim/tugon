@@ -43,11 +43,14 @@ test("administrator invites using GoTrue mail and cannot search restricted case 
     await expect(page.getByRole("heading", { name: "Administration", exact: true })).toBeVisible();
     await expect(nav.locator(`a[href$="tab=${tab}"]`)).toHaveAttribute("aria-current", "page");
   }
-  await page.getByRole("button", { name: "Search cases, pages and actions" }).click();
+  await page.keyboard.press("/");
   const finder = page.getByRole("dialog", { name: "Search Tugon" });
-  await finder.getByRole("combobox").fill(title);
+  const search = finder.getByRole("combobox");
+  await expect(search).toBeFocused();
+  await search.fill(title);
   await expect(finder.getByText(/No matches for/u)).toBeVisible();
   await page.keyboard.press("Escape");
+  await expect(finder).toBeHidden();
   await page.getByRole("button", { name: "Invite staff", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Invite staff" });
   await dialog.getByLabel("Full name").fill("Synthetic Invited Handler");

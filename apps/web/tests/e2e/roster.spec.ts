@@ -101,6 +101,21 @@ test("verified staff roster at phone and desktop and own Tanod schedule", async 
     await expect(mobile.getByRole("link", { name: "Schedule" })).toHaveAttribute("aria-current", "page");
     await expect.poll(() => mobile.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
     if (capture) await mobile.screenshot({ path: join(capture, "local-tanod-schedule-390.png"), animations: "disabled", fullPage: true });
+    const fieldAccount = mobile.getByRole("button", { name: officerName, exact: true });
+    await fieldAccount.press("Enter");
+    await expect(mobile.getByRole("menuitemradio", { name: "Filipino" })).toBeFocused();
+    await mobile.keyboard.press("Enter");
+    await expect(mobile.getByRole("heading", { name: "Iskedyul ng duty" })).toBeVisible();
+    for (const width of [320, 390, 768]) {
+      await mobile.setViewportSize({ width, height: 844 });
+      await expect.poll(() => mobile.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+    }
+    await mobile.setViewportSize({ width: 390, height: 844 });
+    await fieldAccount.press("Enter");
+    await mobile.keyboard.press("ArrowDown");
+    await expect(mobile.getByRole("menuitemradio", { name: "English" })).toBeFocused();
+    await mobile.keyboard.press("Enter");
+    await expect(mobile.getByRole("heading", { name: "Duty schedule" })).toBeVisible();
     await expectPortalShell(mobile, { root: "/tanod", landing: "/tanod", navigation: "Tanod", current: /^Now$/u, secondary: /^Schedule$/u });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/barangay/cases/${caseId}`);
@@ -168,4 +183,27 @@ test("phone-width handlers can consult but not edit the duty roster", async ({ p
   await expectPortalShell(page, {
     root: "/barangay", landing: "/barangay/queue", navigation: "Staff", current: /^(Work )?queue\b/iu, secondary: /^(Mine|My cases)\b/u, forbidden: /^Admin/u,
   });
+
+  await page.goto("/barangay/tanods");
+  const account = page.getByRole("button", { name: "Account", exact: true });
+  await account.press("Enter");
+  const menu = page.getByRole("menu");
+  await expect(menu.getByRole("menuitemradio", { name: "English" })).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(menu.getByRole("menuitemradio", { name: "Filipino" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(menu).toBeHidden();
+  await expect(account).toBeFocused();
+  const dates = page.getByRole("group", { name: "Petsa ng duty" });
+  await expect(dates).toBeVisible();
+  const picked = dates.getByRole("button", { pressed: false }).first();
+  const pickedLabel = await picked.getAttribute("aria-label");
+  if (!pickedLabel) throw new Error("Roster date has no accessible name");
+  await picked.press("Space");
+  await expect(dates.getByRole("button", { name: pickedLabel })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("heading", { name: pickedLabel, exact: true })).toHaveAttribute("aria-live", "polite");
+  for (const width of [320, 390, 768]) {
+    await page.setViewportSize({ width, height: 844 });
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+  }
 });

@@ -27,6 +27,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -163,25 +165,21 @@ export function StaffShell({ children }: { children: ReactNode }) {
         <DropdownMenuLabel className="flex items-center gap-2 text-[12px] font-semibold text-muted-foreground">
           <Languages className="size-3.5" /> {t("Language")}
         </DropdownMenuLabel>
-        <div role="radiogroup" aria-label={t("Language")} className="mx-1 mb-1 grid grid-cols-2 gap-0.5 rounded-full bg-fill p-[3px] text-[12.5px] font-semibold">
-          {(
-            [
-              ["en", "English"],
-              ["fil", "Filipino"],
-            ] as const
-          ).map(([k, label]) => (
-            <button
-              key={k}
-              type="button"
-              role="radio"
-              aria-checked={lang === k}
-              onClick={() => setStaffLang(k)}
-              className={cn("h-8 rounded-full transition", lang === k ? "bg-card shadow-sheet" : "text-muted-foreground hover:text-foreground")}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <DropdownMenuRadioGroup
+          aria-label={t("Language")}
+          value={lang}
+          onValueChange={(value) => {
+            if (value === "en" || value === "fil") setStaffLang(value);
+          }}
+          className="mx-1 mb-1 grid grid-cols-2 gap-0.5 rounded-full bg-fill p-[3px]"
+        >
+          <DropdownMenuRadioItem value="en" className="h-8 rounded-full pl-3 text-[12.5px] font-semibold data-[state=checked]:bg-card">
+            English
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="fil" className="h-8 rounded-full pl-3 text-[12.5px] font-semibold data-[state=checked]:bg-card">
+            Filipino
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => void act("out", signOutPortal).then((r) => r.ok && router.replace("/barangay/signin"))}

@@ -27,3 +27,18 @@ All captures use the separate Supabase pilot stack and synthetic data. Roster an
 | [Lupon summons](./local-lupon-summons-a4.pdf), [settlement](./local-lupon-settlement-a4.pdf), [CFA](./local-lupon-cfa-a4.pdf) | Authorized Chromium A4 drafts with app chrome hidden; unrelated staff access denied |
 
 The matching browser scenarios are in [`apps/web/tests/e2e`](../../../apps/web/tests/e2e/). The `local-` captures contain synthetic data, not the prototype's hardcoded accounts. Date labels and numbers are expected to differ.
+
+## Mobile comparison against the prototype
+
+Reviewed the four 390px reference and implementation pairs above. This is a structural comparison, not a pixel match: the prototype is signed in as a seeded resident and handler, while implementation captures use a guest resident and a supervisor over separate synthetic records.
+
+| Surface | Matching behavior | Differences in the captures |
+| --- | --- | --- |
+| Resident home | White two-column report picker, colored category icons, tinted write-first link, and fixed primary report action. | The guest has no reply-needed banner, personal greeting, or request list. The signed-in reference includes all three. |
+| Staff duty roster | Date strip and stacked day/night cards replace the weekly matrix at phone width. | The supervisor can edit shifts; the prototype capture is read-only. The local capture is cropped to the roster region. |
+| Staff officer directory | Duty grouping, contact and shift details under each name, and a right-aligned, labeled Call action. | The captured supervisor can deactivate officers and the fixture has one officer, so the screenshot alone does not compare a populated off-duty group. |
+| Tanod schedule | Date badges and status labels stay aligned, shift time sits under the shift label, and current/next status is explicit. | The implementation capture includes a page title and a double-shift day. The prototype capture omits the title and uses a single-shift fixture. |
+
+The standalone Docker image passed 10 targeted Chromium scenarios against isolated Supabase. The public resident picker fit at 320px in both languages, with its sign-in link on one line. The resident account switch and report steps worked by keyboard. Staff opened the palette with `/`, typed into its focused search, and closed it with Escape. The staff and Tanod profile menus supported arrow keys and Enter for language selection. The Filipino roster date control updated a polite live region. Filipino staff and Tanod screens fit at 320, 390, and 768px. The same run verified the read-only handler view, desktop roster matrix, denied location fallback, retry without duplicate reports, offline fallback, and authorized printing.
+
+Device-specific VoiceOver and TalkBack, installed-PWA behavior on physical Android and iOS, matched-fixture comparisons of the remaining screen families, and product-owner acceptance are not signed off.
