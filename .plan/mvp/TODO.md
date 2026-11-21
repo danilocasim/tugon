@@ -82,6 +82,7 @@ Build the production pilot of the existing resident, barangay staff/administrati
   - Local: [30 paired mobile captures](./evidence/README.md#mobile-comparison-against-the-prototype) cover the three portals and eight loaded detail/form views. The added pages fit at 320 and 390px. The pass found a staff queue crash for in-progress records without triage and a cramped mobile incident heading; the queue retains the record without inventing triage, and the incident close action now sits below its title on phones. The [evidence](./evidence/README.md#additional-role-and-screen-comparisons) records differences and the remaining device, accessibility and acceptance checks.
 - [ ] **5.4 — Negative access and resilience pass.** Test every policy boundary, upload limits, abuse limits, reconnect, provider outage, interrupted writes, and queue backlogs; validate public assets and otherwise private cache headers. **Depends:** 5.3. **Verify:** No cross-actor, anonymous or post-deactivation data access through SQL/API/Storage/Realtime; provider downtime does not block case work; hosted runtime meets the agreed pilot response and recovery budgets.
   - Local: all 127 assertions in eight pgTAP files passed, including direct intake RPC, offboarding, and delivery replays. Chromium exercised wrong-role, cross-account, password-only and post-revocation reads, denied cross-role Realtime subscriptions, and verified interrupted writes and private cache behavior.
+  - The private Supabase evidence bucket rejected an 800,001-byte synthetic upload and stored no object.
   - A single immediate resend against local GoTrue returned `429 over_email_send_rate_limit`. The isolated worker `503`/restart drill in 3.4 verified that provider failure did not block new case intake or cause an ambiguous send to retry. Hosted abuse limits and agreed service budgets remain open.
 
 **Gate 5:** DPO, barangay owner and operations owner sign off on the staged product. No production launch with missing access tests, data restoration proof, or unknown legal hold behavior.
@@ -116,5 +117,7 @@ Start the linked local preview with `node ops/with-local-supabase.mjs npm --pref
 | `npm --prefix apps/web run test` | Domain, formatting, provider, and integration fixtures |
 | `npm --prefix apps/web run build` | Production output, fonts, maps, and route build |
 | `npm --prefix apps/web run test:e2e` | Browser scenarios, viewport parity and print check fixtures |
+
+Release CI builds the standalone Docker image first and runs Chromium against it, including the production-only service worker check. The full 23-scenario suite passed locally against the image and disposable Supabase with provider delivery disabled.
 
 After 1.2, the reader-facing app always uses verified identity and authorized live data; test harnesses can seed only disposable environments. Do not promote the prototype JSON store, default credentials, public demo resets, or mocked delivery to production.
