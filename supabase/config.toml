@@ -1,0 +1,69 @@
+project_id = "tugon-mvp"
+
+[api]
+port = 56321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 56322
+shadow_port = 56320
+major_version = 17
+
+[db.seed]
+enabled = false
+
+[studio]
+enabled = false
+
+[local_smtp]
+enabled = true
+port = 56324
+
+[analytics]
+enabled = false
+
+[storage]
+file_size_limit = "5MiB"
+
+[auth]
+site_url = "http://localhost:3100"
+additional_redirect_urls = ["http://localhost:3100/auth/callback"]
+jwt_expiry = 900
+enable_signup = true
+enable_anonymous_sign_ins = false
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+otp_length = 6
+otp_expiry = 600
+
+[auth.email.template.confirmation]
+subject = "Tugon · Kumpirmahin ang email / Verify your email"
+content_path = "./ops/supabase/templates/confirmation.html"
+
+[auth.email.template.magic_link]
+subject = "Tugon · Sign-in code"
+content_path = "./ops/supabase/templates/magic-link.html"
+
+[auth.email.template.invite]
+subject = "Tugon · Staff invitation"
+content_path = "./ops/supabase/templates/invite.html"
+
+[auth.email.template.recovery]
+subject = "Tugon · Staff password reset"
+content_path = "./ops/supabase/templates/recovery.html"
+
+[auth.sms]
+enable_signup = false
+enable_confirmations = true
+
+# Local CLI fixture only. This number is never contacted by a provider.
+[auth.sms.test_otp]
+639000000041 = "041628"
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true

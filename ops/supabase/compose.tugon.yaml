@@ -1,0 +1,39 @@
+# Merge with the upstream docker-compose.yml pinned in .plan/mvp/OPERATIONS.md.
+# Resolve paths and companion volumes relative to that upstream directory.
+# Coolify should reach the API gateway on its isolated proxy network, not a host port.
+services:
+  api-gw:
+    ports: !reset []
+  supavisor:
+    ports: !reset []
+  auth:
+    environment:
+      GOTRUE_SITE_URL: ${TUGON_ORIGIN:?Set the canonical Tugon HTTPS origin}
+      GOTRUE_URI_ALLOW_LIST: ${TUGON_ORIGIN:?Set the canonical Tugon HTTPS origin}/auth/callback
+      GOTRUE_DISABLE_SIGNUP: 'false'
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: 'true'
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: 'false'
+      GOTRUE_MAILER_AUTOCONFIRM: 'false'
+      GOTRUE_MAILER_OTP_LENGTH: '6'
+      GOTRUE_MAILER_OTP_EXP: '600'
+      GOTRUE_MAILER_TEMPLATES_MAGIC_LINK: ${TUGON_MAIL_TEMPLATES_BASE:?Set the operator-owned GoTrue template base}/magic-link.html
+      GOTRUE_MAILER_TEMPLATES_CONFIRMATION: ${TUGON_MAIL_TEMPLATES_BASE:?Set the operator-owned GoTrue template base}/confirmation.html
+      GOTRUE_MAILER_TEMPLATES_INVITE: ${TUGON_MAIL_TEMPLATES_BASE:?Set the operator-owned GoTrue template base}/invite.html
+      GOTRUE_MAILER_TEMPLATES_RECOVERY: ${TUGON_MAIL_TEMPLATES_BASE:?Set the operator-owned GoTrue template base}/recovery.html
+      GOTRUE_SMTP_HOST: smtp.resend.com
+      GOTRUE_SMTP_PORT: '465'
+      GOTRUE_SMTP_USER: resend
+      GOTRUE_SMTP_PASS: ${RESEND_SMTP_KEY:?Set the staging or production Resend SMTP key}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${RESEND_SMTP_FROM:?Set the approved sending address}
+      GOTRUE_SMTP_SENDER_NAME: Tugon
+      GOTRUE_EXTERNAL_PHONE_ENABLED: ${TUGON_GOTRUE_PHONE_ENABLED:-false}
+      GOTRUE_SMS_AUTOCONFIRM: 'false'
+      GOTRUE_SMS_OTP_LENGTH: '6'
+      GOTRUE_SMS_OTP_EXP: '300'
+      GOTRUE_HOOK_SEND_SMS_ENABLED: ${TUGON_GOTRUE_SMS_HOOK_ENABLED:-false}
+      GOTRUE_HOOK_SEND_SMS_URI: ${TUGON_GO_TRUE_SMS_HOOK_URI:-}
+      GOTRUE_HOOK_SEND_SMS_SECRETS: ${TUGON_AUTH_SMS_HOOK_SECRET:-}
+      GOTRUE_RATE_LIMIT_OTP: ${TUGON_AUTH_OTP_HOURLY_LIMIT:-30}
+      GOTRUE_RATE_LIMIT_VERIFY: ${TUGON_AUTH_VERIFY_HOURLY_LIMIT:-30}
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: ${TUGON_AUTH_EMAIL_HOURLY_LIMIT:-30}
+      GOTRUE_RATE_LIMIT_SMS_SENT: ${TUGON_AUTH_SMS_HOURLY_LIMIT:-30}

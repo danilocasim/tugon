@@ -1,0 +1,34 @@
+services:
+  web:
+    build:
+      context: ../../apps/web
+    environment:
+      SUPABASE_URL: ${SUPABASE_URL:?Set the approved Supabase gateway URL}
+      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:?Set the gateway publishable key}
+      SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL:-}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY:?Set the server-only service key}
+      TUGON_SETUP_SECRET: ${TUGON_SETUP_SECRET:?Set an independently generated secret}
+      TUGON_ORIGIN: ${TUGON_ORIGIN:?Set the exact HTTPS app origin}
+      TUGON_LIVE_DELIVERY: ${TUGON_LIVE_DELIVERY:-off}
+      TUGON_EMAIL_DELIVERY: ${TUGON_EMAIL_DELIVERY:-off}
+      TUGON_SMS_DELIVERY: ${TUGON_SMS_DELIVERY:-off}
+      TUGON_AUTH_SMS_ENABLED: ${TUGON_AUTH_SMS_ENABLED:-off}
+      TUGON_AUTH_SMS_HOOK_SECRET: ${TUGON_AUTH_SMS_HOOK_SECRET:-}
+      SEMAPHORE_API_KEY: ${SEMAPHORE_API_KEY:-}
+      SEMAPHORE_SENDER: ${SEMAPHORE_SENDER:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM: ${RESEND_FROM:-}
+      TUGON_JOBS_SECRET: ${TUGON_JOBS_SECRET:-}
+      TUGON_RETENTION_JOBS: ${TUGON_RETENTION_JOBS:-off}
+      TUGON_EVIDENCE_GC: ${TUGON_EVIDENCE_GC:-off}
+    expose:
+      - '3000'
+    healthcheck:
+      test: ['CMD', 'node', '-e', 'fetch("http://127.0.0.1:3000/api/health/ready",{signal:AbortSignal.timeout(2500)}).then(r=>process.exit(r.ok?0:1),()=>process.exit(1))']
+      start_period: 15s
+      timeout: 4s
+      interval: 30s
+      retries: 3
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true

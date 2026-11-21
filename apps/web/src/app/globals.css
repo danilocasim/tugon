@@ -1,0 +1,265 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+/* Light-only theme: keep shadcn's dark: utilities from following the OS setting. */
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Tugon design tokens.
+  Thesis: quiet, app-native civic utility. Surfaces are separated by tone and
+  soft elevation, not outlines. One confident green for actions; urgency is the
+  only loud color. Containers exist only where they group a decision.
+*/
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-atkinson-mono), ui-monospace, monospace;
+  --font-heading: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-deep: var(--brand-deep);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-high: var(--high);
+  --color-high-soft: var(--high-soft);
+  --color-high-line: var(--high-line);
+  --color-medium: var(--medium);
+  --color-medium-soft: var(--medium-soft);
+  --color-medium-line: var(--medium-line);
+  --color-normal: var(--normal);
+  --color-normal-soft: var(--normal-soft);
+  --color-normal-line: var(--normal-line);
+  --color-note: var(--note);
+  --color-note-line: var(--note-line);
+  --color-ink-3: var(--ink-3);
+  --color-canvas: var(--background);
+  --color-sunken: var(--sunken);
+  --color-fill: var(--fill);
+  --color-fill-strong: var(--fill-strong);
+  --color-hairline: var(--hairline);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+
+  --shadow-soft: 0 1px 2px rgb(18 24 32 / 0.04), 0 6px 20px -8px rgb(18 24 32 / 0.1);
+  --shadow-sheet: 0 0 0 0.5px rgb(18 24 32 / 0.05), 0 1px 2px rgb(18 24 32 / 0.04), 0 6px 18px -8px rgb(18 24 32 / 0.08);
+  --shadow-lift: 0 0 0 0.5px rgb(18 24 32 / 0.06), 0 2px 4px rgb(18 24 32 / 0.05), 0 12px 28px -10px rgb(18 24 32 / 0.16);
+  --shadow-float: 0 1px 2px rgb(18 24 32 / 0.06), 0 18px 48px -12px rgb(18 24 32 / 0.24);
+  --shadow-press: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(8 72 58 / 0.25), 0 6px 16px -6px rgb(8 72 58 / 0.45);
+
+  --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgb(194 56 31 / 0.45); }
+    80%, 100% { box-shadow: 0 0 0 10px rgb(194 56 31 / 0); }
+  }
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: #f2f1ed;
+  --sunken: #e9e7e1;
+  --foreground: #121820;
+  --card: #ffffff;
+  --card-foreground: #121820;
+  --popover: #ffffff;
+  --popover-foreground: #121820;
+  --primary: #0b5d4b;
+  --primary-foreground: #fbfaf6;
+  --secondary: #ebe9e3;
+  --secondary-foreground: #121820;
+  --muted: #ebe9e3;
+  --muted-foreground: #5a606b;
+  --accent: #ebe9e3;
+  --accent-foreground: #121820;
+  --destructive: #c2381f;
+  --border: rgb(18 24 32 / 0.08);
+  --input: rgb(18 24 32 / 0.12);
+  --ring: #0b5d4b;
+  --ink-3: #6b707b;
+
+  /* Translucent fills read correctly on both the canvas and white sheets. */
+  --fill: rgb(18 24 32 / 0.05);
+  --fill-strong: rgb(18 24 32 / 0.08);
+  --hairline: rgb(18 24 32 / 0.07);
+
+  --brand-soft: #e1efe8;
+  --brand-deep: #08483a;
+  --gold: #dd9a2c;
+  --gold-soft: #fbf0db;
+
+  --high: #c2381f;
+  --high-soft: #fdeae4;
+  --high-line: #f1bba9;
+  --medium: #995800;
+  --medium-soft: #fcf1dc;
+  --medium-line: #ebcb8e;
+  --normal: #375a80;
+  --normal-soft: #e8eff7;
+  --normal-line: #b7c9de;
+
+  --note: #fff8dc;
+  --note-line: #efe2a6;
+
+  --chart-1: #0b5d4b;
+  --chart-2: #dd9a2c;
+  --chart-3: #c2381f;
+  --chart-4: #375a80;
+  --chart-5: #8b7aa6;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "kern";
+    text-rendering: optimizeLegibility;
+  }
+  /* Grid items may shrink below their content (truncated text, maps), so nothing overflows narrow screens. */
+  :where(.grid) > * {
+    min-width: 0;
+  }
+  ::selection {
+    background: var(--brand-soft);
+    color: var(--brand-deep);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Printed reports and Lupon forms: plain paper with real margins. */
+@page {
+  margin: 16mm;
+}
+@media print {
+  body {
+    background: white;
+  }
+}
+
+@layer utilities {
+  /* Filled input: no outline at rest, clear ring on focus, red ring when invalid. */
+  .field {
+    background-color: var(--fill);
+    border: 0;
+    outline: none;
+    transition:
+      background-color 0.15s,
+      box-shadow 0.15s;
+  }
+  .field::placeholder {
+    color: rgb(107 112 123 / 0.8);
+  }
+  .field:hover {
+    background-color: var(--fill-strong);
+  }
+  .field:focus,
+  .field:focus-visible {
+    background-color: var(--card);
+    box-shadow:
+      0 0 0 2px var(--ring),
+      0 0 0 6px rgb(11 93 75 / 0.12);
+    outline: none;
+  }
+  .field[aria-invalid="true"] {
+    box-shadow: 0 0 0 2px var(--high);
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 0px);
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  /* Receipt slip: perforated top and bottom edges. */
+  .perforated {
+    --hole: 7px;
+    -webkit-mask:
+      radial-gradient(circle var(--hole) at 50% 0, #0000 98%, #000) 50% 0 / 22px 51% repeat-x,
+      radial-gradient(circle var(--hole) at 50% 100%, #0000 98%, #000) 50% 100% / 22px 51% repeat-x;
+    mask:
+      radial-gradient(circle var(--hole) at 50% 0, #0000 98%, #000) 50% 0 / 22px 51% repeat-x,
+      radial-gradient(circle var(--hole) at 50% 100%, #0000 98%, #000) 50% 100% / 22px 51% repeat-x;
+  }
+  /* Internal notes read like a legal pad so they never pass for resident messages. */
+  .ruled {
+    background-color: var(--note);
+    background-image: repeating-linear-gradient(transparent 0 23px, var(--note-line) 23px 24px);
+    background-position: 0 10px;
+  }
+}
+
+/* MapLibre: quiet attribution and controls that match the system. */
+.maplibregl-ctrl-attrib {
+  font-family: var(--font-atkinson), sans-serif;
+  font-size: 10.5px !important;
+  background: rgb(255 255 255 / 0.78) !important;
+  border-radius: 6px 0 0 0;
+}
+.maplibregl-ctrl-group {
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-sheet) !important;
+  border: 0;
+}
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--hairline) !important;
+}
+.maplibregl-canvas:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

@@ -1,0 +1,10 @@
+.git
+.env*
+.next
+node_modules
+coverage
+playwright-report
+test-results
+*.tsbuildinfo
+next-env.d.ts
+public/maplibre/maplibre-gl-worker.mjs

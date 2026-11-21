@@ -1,0 +1,91 @@
+import type { Category, Urgency } from "./domain";
+
+/**
+ * Demo training corpus: synthetic Taglish barangay requests with adjudicated
+ * labels, written under the thesis anti-leakage rules (no category label words,
+ * no "urgent", no real names). Stands in for the 480-record training split.
+ */
+export const CORPUS: [text: string, category: Category, urgency: Urgency][] = [
+  // Peace and Order
+  ["May nag-aaway sa kanto ng Purok 3, may hawak na patalim yung isa, paki-punta po agad", "peace", "high"],
+  ["May lalaking nag-aamok sa may basketball court, nagbabato ng bote sa mga dumadaan", "peace", "high"],
+  ["Rambulan ng mga kabataan dito sa Purok 1 Alley, may duguan na po", "peace", "high"],
+  ["Narinig namin may putok ng baril malapit sa junkshop, takot na takot mga tao", "peace", "high"],
+  ["Yung kapitbahay sinasaktan yung asawa niya, may sigawan at nababasag na gamit", "peace", "high"],
+  ["May nanloob sa bahay sa Block 4, nasa loob pa daw yung magnanakaw", "peace", "high"],
+  ["Gabi-gabi na lang malakas ang videoke sa tapat namin hanggang 2am, hindi makatulog mga bata", "peace", "medium"],
+  ["May mga tambay na umiinom sa gilid ng day care tuwing gabi, nagsisigawan at nanggugulo", "peace", "medium"],
+  ["Nawalan ng motor ang kapitbahay kagabi sa may main road, baka may nagnanakaw sa area", "peace", "medium"],
+  ["Yung grupo ng kabataan nagkakarera ng motor sa loob ng Purok 4, delikado sa naglalakad", "peace", "medium"],
+  ["May nagbebenta ng kahina-hinalang gamit sa kanto, maraming hindi kilalang tao pumupunta gabi-gabi", "peace", "medium"],
+  ["Ang ingay ng inuman sa kabilang bahay hanggang madaling araw, may nagmumurahan pa", "peace", "medium"],
+  ["Paulit-ulit na nagpaparada ng tricycle sa harap ng gate namin, hindi kami makalabas", "peace", "normal"],
+  ["Pwede po bang magpa-schedule ng pag-uusap sa Lupon tungkol sa alitan namin ng kapitbahay sa bakod", "peace", "normal"],
+  ["Nawala po yung wallet ko sa covered court, baka may nag-surrender sa tanod", "peace", "normal"],
+  ["Madalas walang tanod na nakaduty sa outpost tuwing madaling araw, paalala lang po", "peace", "normal"],
+  ["Paano po mag-file ng reklamo sa Lupon para sa utang na hindi binabayaran ng kapitbahay", "peace", "normal"],
+
+  // Infrastructure and Public Works
+  ["Natumba yung poste ng kuryente sa Purok 4 Creek side, nakalaylay yung live wire sa kalsada", "infra", "high"],
+  ["May sunog sa likod ng junkshop, kumakalat na ang apoy sa katabing bahay", "infra", "high"],
+  ["Gumuho yung pader sa tabi ng sapa, may bahay na nakadikit dito at may tao sa loob", "infra", "high"],
+  ["Bukas yung manhole sa gitna ng main road, walang takip at madilim, may muntik nang mahulog", "infra", "high"],
+  ["Umuusok at nag-i-spark yung transformer sa may Health Center, amoy sunog na", "infra", "high"],
+  ["Malalim na lubak sa Purok 1 main road, ilang motor na ang sumemplang ngayong linggo", "infra", "medium"],
+  ["Patay na yung tatlong streetlight sa Purok 3 Corner, sobrang dilim pag gabi", "infra", "medium"],
+  ["Sira ang takip ng kanal sa harap ng day care, baka mahulog ang mga bata", "infra", "medium"],
+  ["Yung tulay na kahoy papuntang Purok 5 umuuga na, sira na ang ilang tabla", "infra", "medium"],
+  ["Nakatagilid na yung poste ng ilaw sa may gym, parang babagsak pag lumakas ang hangin", "infra", "medium"],
+  ["Basag ang semento sa gilid ng kalsada, lumalaki ang butas tuwing umuulan", "infra", "medium"],
+  ["Pa-request po ng pagpapalit ng bombilya sa ilaw sa tapat ng multipurpose hall", "infra", "normal"],
+  ["Kupas na po yung pedestrian lane sa harap ng school, paki-repaint kung may budget", "infra", "normal"],
+  ["May maliit na crack sa sementadong daan sa Purok 2, pakitingnan lang po pag may oras", "infra", "normal"],
+  ["Request po na lagyan ng signage yung one way sa may alley", "infra", "normal"],
+  ["Tanong lang po kailan matatapos yung ginagawang kalsada sa Purok 5", "infra", "normal"],
+
+  // Sanitation and Health
+  ["Abot-baywang na baha sa Purok 4 Creek side, may matanda pa sa loob ng bahay na hindi makalabas", "sanitation", "high"],
+  ["Dalawang bata na ang na-confine dahil sa dengue, ang daming lamok dito sa may sapa", "sanitation", "high"],
+  ["Nakagat ng asong gala yung bata sa Purok 4 Gym, dumudugo, baka may rabies yung aso", "sanitation", "high"],
+  ["Umaapaw na yung imburnal at pumapasok na ang maruming tubig sa mga bahay, may mga bata at senior", "sanitation", "high"],
+  ["Mabilis tumataas ang baha sa may creek, lubog na ang kalsada at may mga batang naiwan sa bahay", "sanitation", "high"],
+  ["Tatlong araw nang hindi nakukuha ang basura sa Purok 3 Block 4, nangangamoy na at dinudumog ng langaw", "sanitation", "medium"],
+  ["Barado ang kanal sa Purok 1 Main Road, konting ulan lang bumabaha na sa kalsada", "sanitation", "medium"],
+  ["May asong gala na agresibo sa may gate, hinahabol ang mga estudyante tuwing umaga", "sanitation", "medium"],
+  ["Mabaho at umaapaw yung poso negro ng isang bahay, tumutulo papunta sa daanan", "sanitation", "medium"],
+  ["Ang daming lamok sa stagnant na tubig sa bakanteng lote, baka pamugaran ng dengue", "sanitation", "medium"],
+  ["Tambak na ang basura sa tabi ng day care, umaapaw na sa kalsada at mabaho na", "sanitation", "medium"],
+  ["Kailan po ang schedule ng koleksyon ng basura dito sa Purok 5", "sanitation", "normal"],
+  ["Request po ng fogging sa Purok 2 kahit walang kaso, para lang sigurado", "sanitation", "normal"],
+  ["Pwede po bang humingi ng sako para sa segregation ng recyclables", "sanitation", "normal"],
+  ["Saan po pwedeng magtapon ng lumang kutson at sirang appliances", "sanitation", "normal"],
+  ["May nagtatapon ng basura sa bakanteng lote tuwing gabi, pakisabihan lang po", "sanitation", "normal"],
+
+  // Documents and Certification (no High urgency in the thesis dataset)
+  ["Kailangan ko po ng barangay clearance bukas ng umaga para sa job interview, pwede po bang ma-rush", "documents", "medium"],
+  ["Need ko po certificate of indigency ngayong linggo para sa bill ng nanay ko sa ospital", "documents", "medium"],
+  ["Expired na po yung business clearance ko at may inspection na next week", "documents", "medium"],
+  ["Ano po ang requirements para sa barangay clearance", "documents", "normal"],
+  ["Magkano po at gaano katagal ang pagkuha ng certificate of residency", "documents", "normal"],
+  ["Paano po kumuha ng first time jobseeker certificate, bagong graduate po ako", "documents", "normal"],
+  ["Pwede po bang ipakuha sa kapatid ko yung clearance ko, may authorization letter naman", "documents", "normal"],
+  ["Anong oras po bukas ang barangay hall para mag-request ng indigency", "documents", "normal"],
+  ["Kailangan ko po ng cedula at clearance para sa bagong trabaho, sabay na po ba pwede", "documents", "normal"],
+  ["Ilang valid ID po ang kailangan para sa certificate of residency", "documents", "normal"],
+
+  // Social Assistance and Others
+  ["Nahimatay po si lola sa bahay, wala kaming sasakyan, pwede po bang ipadala ang ambulansya ng barangay", "social", "high"],
+  ["Na-stroke po ang tatay ko, kailangan ng masasakyan papuntang ospital ngayon na", "social", "high"],
+  ["Nasunugan po kami kagabi, wala kaming matulugan ngayon kasama ang tatlong bata", "social", "high"],
+  ["Nanganganak na po ang kapatid ko, walang masakyan papuntang lying-in", "social", "high"],
+  ["Senior citizen po ako at naubos na ang maintenance na gamot, may tulong po ba ang barangay", "social", "medium"],
+  ["Solo parent po ako at nawalan ng trabaho, paano po makakuha ng tulong pang-pagkain para sa mga anak", "social", "medium"],
+  ["PWD po ang anak ko at kailangan namin ng wheelchair, may programa po ba", "social", "medium"],
+  ["Na-ospital po ang asawa ko, may maitutulong po ba ang barangay sa gastos sa gamot", "social", "medium"],
+  ["Kailan po ang susunod na distribusyon ng ayuda dito sa Purok 2", "social", "normal"],
+  ["Paano po mag-register sa listahan ng senior citizen para sa pension", "social", "normal"],
+  ["May libreng medical mission po ba ngayong buwan sa barangay", "social", "normal"],
+  ["Tanong lang po kung kasama kami sa listahan ng 4Ps, hindi pa kami natatawagan", "social", "normal"],
+  ["Saan po pwedeng mag-volunteer para sa feeding program", "social", "normal"],
+  ["Paano po mag-apply ng solo parent ID dito sa barangay", "social", "normal"],
+];

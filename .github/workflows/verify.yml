@@ -1,0 +1,26 @@
+name: Verify Tugon
+on: [push, pull_request]
+permissions:
+  contents: read
+
+jobs:
+  app-and-db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.16.0
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.113.0
+      - run: npm --prefix apps/web ci
+      - run: npm --prefix apps/web run lint && npm --prefix apps/web run typecheck && npm --prefix apps/web run test
+      - run: supabase start --exclude studio,postgres-meta,edge-runtime,imgproxy
+      - run: supabase test db
+      - run: npm --prefix apps/web exec -- playwright install --with-deps chromium
+      - run: node ops/with-local-supabase.mjs npm --prefix apps/web run test:e2e
+      - run: docker build -t tugon-web:ci apps/web

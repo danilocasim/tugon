@@ -1,0 +1,24 @@
+{
+  "name": "Tugon · Resident portal",
+  "short_name": "Tugon",
+  "description": "Report concerns and request barangay services, then track every update.",
+  "id": "/resident",
+  "start_url": "/resident",
+  "scope": "/resident",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2f1ed",
+  "theme_color": "#f2f1ed",
+  "lang": "fil",
+  "categories": ["government", "utilities"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Mag-ulat", "short_name": "Mag-ulat", "url": "/resident/report", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Aking mga request", "short_name": "Request", "url": "/resident/requests", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "prefer_related_applications": false
+}

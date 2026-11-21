@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fil">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f2f1ed" />
+    <title>Offline · Tugon</title>
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #f2f1ed;
+        color: #121820;
+        font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      main { max-width: 380px; display: grid; gap: 16px; }
+      h1 { margin: 0; font-size: 26px; line-height: 1.15; letter-spacing: -0.02em; }
+      p { margin: 0; color: #565c67; }
+      .en { font-size: 14px; color: #6b707b; }
+      .call {
+        display: grid; gap: 10px; padding: 16px; border-radius: 16px;
+        background: #fdeae4; border: 1px solid #f1bba9; color: #7f2311;
+      }
+      a.btn, button {
+        display: inline-flex; align-items: center; justify-content: center;
+        height: 48px; border-radius: 12px; font: inherit; font-weight: 700; text-decoration: none;
+      }
+      a.btn { background: #c2381f; color: #fff; }
+      button { border: 1px solid #d6d2c7; background: #fff; color: #121820; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <svg width="44" height="44" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0b5d4b"/><path d="M7.5 15.2 16 8.4l8.5 6.8" fill="none" stroke="#fbfaf6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 14.6V23h11v-8.4" fill="none" stroke="#fbfaf6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="m13.3 18.6 2 2 3.6-3.9" fill="none" stroke="#f1b44c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Offline ka ngayon</h1>
+      <p>Hindi maipapadala o maa-update ang mga request hangga't walang koneksyon. Walang naitatabing ulat dito sa device.</p>
+      <p class="en">You're offline. Requests can't be sent or refreshed until you reconnect. Nothing is stored on this device.</p>
+      <div class="call">
+        <strong>May panganib ngayon? Huwag maghintay.</strong>
+        <a class="btn" href="tel:911">Tumawag sa 911</a>
+      </div>
+      <button type="button" onclick="location.reload()">Subukan ulit · Try again</button>
+    </main>
+  </body>
+</html>

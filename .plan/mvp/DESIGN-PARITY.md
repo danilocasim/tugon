@@ -1,0 +1,34 @@
+# Tugon MVP — prototype parity contract
+
+**Visual source of truth:** [`prototype/src/features`](../../prototype/src/features), [route tree](../../prototype/src/app), [design tokens](../../prototype/src/app/globals.css), [root font definitions](../../prototype/src/app/layout.tsx), [shared UI](../../prototype/src/components) and [walkthrough](../../prototype/README.md). If older screenshots disagree with the current prototype, capture the current surface and use that. Port the components and patterns rather than rebuilding from screenshots with generic defaults.
+
+Keep Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono, the warm paper canvas and white sheets, filled inputs, status/urgency contrast, icon family, barangay marks, spacing and type hierarchy. Use green as an action/status accent. Retain accessible focus, localized labels, hours and dates. Replace fictional barangay identity or location data only with an approved pilot configuration. Production verification screens may add states required by real OTPs, MFA, invitations and password recovery, in the same component language.
+
+## Screen and workflow inventory
+
+| Prototype surface | Production parity to verify | [Slice IDs](./TODO.md) |
+| --- | --- | --- |
+| `/`, `/demo` | Public portal entry can reuse hub marks, spacing and entry cards without sample credentials or the fictional walkthrough. `/demo`, side-by-side persona switching, seed/reset and drop-connection toggles stay in the prototype/isolated test harness only. | 0.1, 1.5 |
+| `/resident`, `/resident/services/[category]` | Neutral white two-column report picker, colored category symbols, “Not sure?” entry, reply-needed priority, active/history rows, how-it-works, service guide, hall hours/hotline and emergency action. Restore correct category after sign-in. | 1.3, 2.1, 2.5 |
+| `/resident/signin`, `/resident/account`, `/resident/privacy` | Email code/onboarding, language and preferences, verified identity and privacy notice, DPO, export, deletion and recovery states. | 1.3, 2.5, 3.4, 5.1, 5.2 |
+| `/resident/report`, `/resident/receipt/[id]` | What → Where → Photo → Review with draft/retry, location alternatives, emergency copy and numbered receipt. | 2.1, 2.2 |
+| `/resident/requests`, `/resident/requests/[id]`, `/resident/updates` | Request cards and progress, case timeline, reply, withdraw/follow-up, outcome/proof photo, notifications and unread states. | 2.5, 2.6, 2.7 |
+| `/barangay`, `/barangay/signin` | Role-specific landing and layout, keyboard search/navigation, desktop side rail, mobile overflow/More and alerts. Replace demo personas with real sign-in and TOTP; keep role-aware destinations. | 1.4, 1.5, 4.6 |
+| `/barangay/inbox`, `/barangay/intake/new` | Responsive intake list/selected case, emergency, classifier suggestion and correction, ask/referral/duplicate, assisted channel and explicit SMS consent. | 2.3, 4.2 |
+| `/barangay/queue`, `/barangay/mine`, `/barangay/cases/[id]` | Ranked worklist and filters, ownership, timeline/notes, outcome/proof, field dispatch and Lupon evidence/incident chips based on access. | 2.4–2.6, 3.3, 4.2–4.4 |
+| `/barangay/tanods` | Current coverage and assignments, one selected day's Day/Night lists at narrow widths, weekly grid only when it fits, edit controls only for supervisor/admin, and directory grouped by duty with aligned **Call** actions. | 3.1–3.3 |
+| `/barangay/insights`, `/barangay/incidents`, `/barangay/incidents/[id]` | KPIs, map, filters/DBSCAN/K-Means/CSV; create incident, link eligible reports, preview/broadcast update, close and show what remains in intake. | 4.1, 4.2 |
+| `/barangay/lupon`, `/barangay/lupon/[id]`, `/barangay/lupon/[id]/print` | Docket and status/deadlines, hearing/summons, settlement/CFA/dismiss/withdraw as authorized; approved A4 summons, settlement and CFA templates. | 4.3, 4.4 |
+| `/barangay/reports` | Month picker, approved aggregate accomplishment report with signature block and print. | 4.5 |
+| `/barangay/admin?tab=…` | Staff/roles, targets/routing, referrals, SMS log, data privacy and audit; deep links, admin-only access and masked data. | 3.4, 4.6, 5.1, 5.2 |
+| `/tanod/signin`, `/tanod`, `/tanod/a/[id]` | Phone-code sign-in, on/off-duty status, assignment cards, accepted/arrived/report/declined/closed states, field proof upload and permitted maps/calls. | 3.1–3.3 |
+| `/tanod/schedule`, `/tanod/history` | Neutral current/next card, aligned date/shift/status rows with hours beneath shift labels, soft today highlight and equal single-shift row height, active/next/completed/day-off copy, three weeks and history. | 3.2, 3.3 |
+| API routes and public assets | Replace demo snapshots/SSE with scoped data/realtime; preserve authorized photo/field-photo/export behavior. Keep marks, install assets, offline shell and MapLibre behavior without exposing tests or private content. | 1.5, 2.2, 2.7, 3.3, 5.1 |
+
+## Verification matrix and evidence
+
+- **Baseline.** Capture with fixed time, seed, language and persona; stabilize font and animation. Save synthetic fixture references and screenshots for the approved prototype and the candidate. Compare the 320px stress case, 390px everyday phone, 768px intermediate width, and 1440px desktop. At 320/390, `document.documentElement.scrollWidth` equals the viewport on core screens; local table behavior at wide sizes does not expand the page. Validate embedded-width behavior by available space, not device name.
+- **States and roles.** Capture empty/loaded/error/retry, forbidden/expired session, disabled/pending controls, missing GPS/map tiles, long localized text, urgent/restricted cases, and off-duty/on-duty/current/next. Check both Filipino and English; no color-only meaning. Verify a stable day/night schedule across Manila midnight, varied week lengths, and no title/status or bottom-bar overlaps. Record role, fixture, viewport and locale with each screenshot.
+- **Interaction.** Test keyboard/focus for report steps, account, palette, day selection and dialog confirmation; confirm error announcements, readable contrast and suitable touch targets. Capture handset smoke on Android Chromium and iOS Safari, including install entry points and a denied-permissions flow. No external call is required to verify a `tel:` link.
+- **Print.** Produce A4 PDF samples with synthetic data for monthly report, summons, settlement and CFA. Verify headings, signature areas, wrapping, page boundaries, and absence of app chrome or unauthorized personal information; reviewers approve wording before live use.
+- **Deviations.** Record a reason and approval for any noticeable screen, feature or flow deviation. Intentional differences include verified sign-in, remove demo controls, private-data/offline restrictions, actual branding/configuration and approved legal text—not an unreviewed restyle.

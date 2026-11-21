@@ -1,0 +1,15 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+coverage/
+playwright-report/
+test-results/
+**/public/maplibre/maplibre-gl-worker.mjs
+/supabase/.branches/
+/supabase/.temp/
+/ops/supabase/runtime/

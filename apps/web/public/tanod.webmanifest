@@ -1,0 +1,24 @@
+{
+  "name": "Tugon Tanod",
+  "short_name": "Tanod",
+  "description": "Field assignments, duty schedule and field reports for barangay tanods.",
+  "id": "/tanod",
+  "start_url": "/tanod",
+  "scope": "/tanod",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2f1ed",
+  "theme_color": "#f2f1ed",
+  "lang": "fil",
+  "categories": ["government", "productivity"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Mga assignment", "short_name": "Ngayon", "url": "/tanod", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Iskedyul ng duty", "short_name": "Iskedyul", "url": "/tanod/schedule", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "prefer_related_applications": false
+}

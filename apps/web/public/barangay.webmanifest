@@ -1,0 +1,19 @@
+{
+  "name": "Tugon Staff",
+  "short_name": "Tugon Staff",
+  "description": "Intake, work queue, cases and hotspots for barangay staff.",
+  "id": "/barangay",
+  "start_url": "/barangay",
+  "scope": "/barangay",
+  "display": "standalone",
+  "background_color": "#f2f1ed",
+  "theme_color": "#f2f1ed",
+  "lang": "en",
+  "categories": ["government", "productivity"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "prefer_related_applications": false
+}
