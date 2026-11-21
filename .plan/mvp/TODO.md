@@ -12,11 +12,11 @@ Build the production pilot of the existing resident, barangay staff/administrati
 
 - [x] **0.1 — Prototype baseline.** Reference routes and demo exclusions are mapped in [Design parity](./DESIGN-PARITY.md). Captured all four requested mobile screens and two A4 print references with the prototype's synthetic accounts; see [evidence and capture conditions](./evidence/README.md).
 - [ ] **0.2 — Hosting and auth smoke.** On an authorized throwaway Coolify environment, pin a Supabase Compose release and probe HTTPS, PostgreSQL/Storage persistence, SSR session refresh, Realtime WebSockets, Resend SMTP, and the Semaphore Send SMS Hook. **Depends:** 0.1. **Verify:** Fresh stack works without public PostgreSQL/Studio; test inboxes and approved phones receive real codes, including a leading-zero OTP; replay fails. If the pinned stack or sender cannot support tanod OTP, document the provider decision before building tanod sign-in. No production sends in this phase.
-  - Local: the pinned release and Coolify overlay passed `docker compose config`; the merged gateway and pooler expose no host ports. Standalone app readiness returned 200. No staging stack or live provider probe was run.
-  - Staging: [GitHub verification](https://github.com/danilocasim/tugon/actions/runs/44938244369) passed at `f2716eb`; Coolify is pinned to that revision. Configured `https://pulong.46.225.143.160.sslip.io` and reserved `pulong-realtime.46.225.143.160.sslip.io`. Both resolve to the same Coolify proxy IP. Pulong did not yet serve a trusted certificate; the app and private Supabase have not been deployed.
+  - Local: the [synthetic staging bundle](../../ops/coolify/build-synthetic-supabase.mjs) applied all migrations in a fresh Compose stack without public host ports. A pre-provisioned `example.test` user received a six-digit GoTrue code through private Mailpit, redeemed it once, and was denied on replay. Unprovisioned signup was denied. The Next.js runtime image passed its dependency readiness probe and the probe failed against an absent listener.
+  - Staging: `https://pulong.46.225.143.160.sslip.io` serves the pinned [app revision `5d1158b`](https://github.com/danilocasim/tugon/commit/5d1158bd22932bc5ae69daf8ead0a4d0492eb2c6) with trusted HTTPS, `noindex, nofollow`, and database-backed readiness (`200`, `no-store`). Chromium verified the resident home and all three sign-in entry points at 390px. The app denies anonymous Realtime credentials and does not route public Supabase APIs, Mailpit, or unauthenticated job requests. The separate Realtime endpoint returned `101` for the approved origin, `403` for a different origin, and `404` for other API paths. No real messages were sent.
 - [ ] **0.3 — Pilot operating rules.** Record the barangay owner, DPO, operations contact, Lupon reviewer, pilot roster and contact list, real service hours, approved map boundaries/landmarks, and provider/retention decisions. **Depends:** 0.1. **Verify:** Named owners and approval evidence are recorded; unresolved items are linked to the exact later gate they block. Do not represent fictional sample data as barangay policy.
 
-**External gates still open:** The temporary `sslip.io` names are approved for staging, not as a production or Resend sender domain. The app needs the pinned private Supabase stack, migrations, runtime secrets, and a successful HTTPS check. Live delivery separately needs an owned, verified sending domain and approved recipients. The pilot requires named barangay, DPO, Lupon, and operations owners.
+**External gates still open:** The temporary `sslip.io` names are for synthetic staging, not for production or Resend sending. Live delivery separately needs an owned, verified sending domain and approved recipients. The pilot requires named barangay, DPO, Lupon, and operations owners plus a restricted backup restore.
 
 **Gate 0:** Design baseline and decisions recorded; external capabilities proven on disposable data or a named blocker is attached to the dependent work.
 
@@ -90,9 +90,9 @@ Build the production pilot of the existing resident, barangay staff/administrati
 
 **Release handoff.** Resume in this order:
 
-1. The first CI-approved revision (`f2716eb`) is pinned in the undeployed Coolify staging app. Do not deploy a different revision implicitly.
-2. Provision the pinned private Supabase stack, run the migrations, and configure runtime-only keys in Coolify. Verify trusted HTTPS on Pulong and permit only the Realtime WebSocket route on the separate hostname. Configure sender and test destinations in the provider consoles, not in chat.
-3. Rehearse staging with synthetic data. Keep the pilot, live Lupon and retention enforcement disabled until the [named owners approve the evidence](./OPERATIONS.md#pilot-approvals-and-run-checklist).
+1. Keep `Tugon Web Staging` pinned to the verified release. Validate readiness, public ingress, and mobile portal entries on every change before sharing the staging URL.
+2. Rehearse a restricted restore of PostgreSQL and private Storage together; then verify authenticated staged flows with operator-provisioned synthetic accounts. Configure real sender domains and approved test destinations in the provider consoles, not in chat, only after authorization.
+3. Keep the pilot, live deliveries, live Lupon, and retention enforcement disabled until the [named owners approve the evidence](./OPERATIONS.md#pilot-approvals-and-run-checklist).
 
 ## Local and CI commands
 
