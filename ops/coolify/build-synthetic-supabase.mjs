@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -102,7 +102,12 @@ await Promise.all(selected.map(async (name) => {
       service.environment[`GOTRUE_MAILER_TEMPLATES_${kind}`] = `http://edge-realtime:8081/${file}.html`;
     }
   }
-  if (name === "storage") service.environment.FILE_SIZE_LIMIT = "5242880";
+  if (name === "storage") {
+    service.environment.FILE_SIZE_LIMIT = "5242880";
+    // Mount the operator probe privately so a manual Coolify task can use a short command.
+    mount(service, "synthetic-auth-smoke", "/opt/pulong/smoke-synthetic-auth.mjs",
+      await readFile(new URL("smoke-synthetic-auth.mjs", import.meta.url), "utf8"));
+  }
   model.services[name] = service;
 }));
 
