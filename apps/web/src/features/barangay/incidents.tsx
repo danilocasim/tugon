@@ -311,21 +311,21 @@ export function IncidentDetail({ id }: { id: string }) {
       <Link href="/barangay/incidents" className="inline-flex items-center gap-1.5 justify-self-start text-[13.5px] font-semibold text-muted-foreground hover:text-foreground">
         <ArrowLeft className="size-4" /> {t("Incidents")}
       </Link>
-      <header className="flex flex-wrap items-start gap-4">
+      <header className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-3 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
         <CategoryIcon category={inc.category} size="lg" />
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2 text-[13px]">
             <span className="font-mono font-semibold">{inc.ref}</span>
             {open ? <span className="rounded-full bg-high-soft px-2.5 py-0.5 text-[11.5px] font-bold text-high">{t("Active")}</span> : <span className="rounded-full bg-fill px-2.5 py-0.5 text-[11.5px] font-semibold">{t("Closed")}</span>}
           </p>
-          <h1 className="mt-1 text-[24px] leading-tight font-bold tracking-tight sm:text-[28px]">{inc.title}</h1>
+          <h1 className="mt-1 text-[24px] leading-tight font-bold tracking-tight wrap-anywhere sm:text-[28px]">{inc.title}</h1>
           <p className="mt-1 text-[13px] text-muted-foreground">
             {CATEGORY[inc.category][lang]} · {t("started by {name} {when}", { name: staffName(data, inc.createdBy), when: rel(inc.createdAt, lang, now) })} ·{" "}
             {t("{n} reports within {radius} m", { n: inc.requestIds.length, radius: inc.radiusM })}
           </p>
         </div>
         {open && supervisor && (
-          <button type="button" onClick={() => setClosing(true)} className="inline-flex h-10 items-center gap-1.5 rounded-full bg-foreground px-4 text-[13.5px] font-bold text-background">
+          <button type="button" onClick={() => setClosing(true)} className="col-start-2 inline-flex min-h-11 items-center gap-1.5 justify-self-start rounded-full bg-foreground px-4 text-[13.5px] font-bold text-background sm:col-start-3 sm:row-start-1">
             <Check className="size-4" /> {t("Close incident")}
           </button>
         )}

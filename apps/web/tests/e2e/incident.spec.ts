@@ -34,8 +34,18 @@ test("incident notices render for residents and closure leaves intake reports op
       if (!refs.some((id) => caseRef.includes(id))) await checkbox.click();
     }
     await create.getByRole("button", { name: "Start incident" }).click();
-    await expect(page.getByRole("heading", { name: title, exact: true })).toBeVisible();
-    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+    const heading = page.getByRole("heading", { name: title, exact: true });
+    const closeAction = page.getByRole("button", { name: "Close incident", exact: true });
+    await expect(heading).toBeVisible();
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+      const titleBox = await heading.boundingBox();
+      const actionBox = await closeAction.boundingBox();
+      if (!titleBox || !actionBox) throw new Error("Incident heading and close action must be visible");
+      expect(actionBox.y).toBeGreaterThanOrEqual(titleBox.y + titleBox.height);
+      expect(actionBox.x).toBeCloseTo(titleBox.x, 0);
+    }
     const notice = "The barangay is clearing the drainage; take a different path while work is ongoing.";
     await page.getByLabel("Public incident update").fill(notice);
     await page.getByRole("button", { name: "Review update" }).click();
@@ -49,7 +59,7 @@ test("incident notices render for residents and closure leaves intake reports op
     await resident.goto(`/resident/requests/${refs[1]}`);
     await expect(resident.getByText("Incident update", { exact: true })).toBeVisible();
     await expect(resident.getByText(notice, { exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "Close incident", exact: true }).click();
+    await closeAction.click();
     const close = page.getByRole("dialog");
     await close.getByLabel("Incident outcome").fill("The drainage has been cleared and the affected route is open again.");
     await close.getByRole("button", { name: "Close and notify" }).click();

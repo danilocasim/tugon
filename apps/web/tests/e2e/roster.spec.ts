@@ -163,7 +163,8 @@ test("verified staff roster at phone and desktop and own Tanod schedule", async 
     try {
       await mobile.goto("/tanod/schedule");
       await expect(mobile).toHaveURL(/\/tanod\/signin/u);
-      expect((await mobile.request.get(fieldPhoto)).status()).toBe(404);
+      const denied = await mobile.evaluate(async (path) => (await fetch(path, { cache: "no-store" })).status, fieldPhoto);
+      expect(denied).toBe(404);
     } finally {
       await reactivate.click();
       await page.getByRole("alertdialog").getByRole("button", { name: "Reactivate", exact: true }).click();

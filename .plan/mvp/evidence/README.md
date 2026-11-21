@@ -54,4 +54,12 @@ Captured 18 more screen pairs in Chromium at 390 × 844 CSS pixels and checked t
 | [Staff records](./staff-records-comparison.webp) | Monthly report, Lupon, Administration | The monthly preview and print action remain. Lupon is deliberately disabled; the existing A4 draft evidence validates authorized rendering separately. Administration uses wrapped mobile navigation and staff cards instead of clipping the prototype's table. |
 | [Tanod field work](./tanod-field-comparison.webp) | Sign-in, Assignment detail, History | Removed the demo officer chooser. The assignment card and progress strip match; the captured assignment status and availability of a map differ by fixture. |
 
-Remaining: matched fixtures for loaded resident details, receipt and service information; staff My cases, assisted intake, incident detail, and the enabled Lupon docket; physical Android/iOS PWA installation and screen reader testing; and formal product-owner acceptance.
+Eight additional English pairs used the same mobile viewport and width checks, with the product running from its standalone release image.
+
+| Sheet | Screens from left to right | Review notes |
+| --- | --- | --- |
+| [Resident detail](./resident-detail-comparison.webp) | Service guide, receipt, request detail | Submitted the same synthetic Public Works report in Purok 1 through both interfaces. The service, receipt and timeline retain the same hierarchy; reference numbers and staging contact copy differ. |
+| [Staff work details](./staff-work-details-comparison.webp) | My cases, assisted intake, incident detail | My cases compares empty vs. assigned work, and assisted intake matches its input order. On phones, the product puts **Close incident** below the title so it can use the full text column. Map content and linked report counts differ by fixture. |
+| [Staff Lupon details](./staff-lupon-details-comparison.webp) | Enabled Lupon docket and mediation case | Temporarily enabled only in isolated local fixtures. The docket, parties, hearing, summons, and schedule are visible in both; case counts and dates differ. This is not approval for live use. |
+
+Remaining: the full role, locale and loading/error-state matrix; Android/iOS PWA installation and screen reader testing; and formal product-owner acceptance.
