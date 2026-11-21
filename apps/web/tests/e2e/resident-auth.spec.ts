@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import sharp from "sharp";
 import { staffAccount, staffSignIn } from "./local-staff";
 import { signUp } from "./local-resident";
+import { expectPortalShell } from "./portal-shell";
 
 test("email verification gates resident profile onboarding", async ({ page, request }) => {
   await signUp(page, request, "/resident/signin", true);
@@ -11,6 +12,7 @@ test("email verification gates resident profile onboarding", async ({ page, requ
   await expect(page.getByRole("heading", { name: /Pilot/ })).toBeVisible();
   const sessionCookie = (await page.context().cookies()).find((cookie) => cookie.name.startsWith("sb-"));
   expect(sessionCookie?.httpOnly).toBe(true);
+  await expectPortalShell(page, { root: "/resident", landing: "/resident", navigation: "Main", current: /^Home$/u, secondary: /^Requests$/u });
 });
 
 test("mobile report retries the same receipt and protects its JPEG", async ({ page, browser, request }) => {

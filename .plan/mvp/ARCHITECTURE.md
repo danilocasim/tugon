@@ -41,7 +41,7 @@ Phone OTP is a staging gate, not assumed working because notifications use Semap
 | --- | --- |
 | Identity/config | Auth users, profiles, memberships, teams, barangay settings, DPO/retention, preferences and consent receipts; separate public configuration from private contacts. |
 | Service reports | Stable UUIDs and unique public references; user/submission idempotency key; private reporter contact and coordinates; classifier suggestion/version separate from staff-confirmed labels; immutable status/history, restricted flag and ownership. |
-| Field work | Officers, duty slots unique by officer/date/shift, assignment state and timestamps, field evidence. Treat stored timestamps as UTC and user-visible dates/shifts/month boundaries as Asia/Manila. |
+| Field work | Officers, duty slots unique by officer/date/shift, assignment state and timestamps, and private field evidence. Offboarding revokes sessions, clears duty slots from the current Manila date, and cancels open assignments without changing completed records. Dispatch and roster mutations lock the active officer before writing. |
 | Operations | Incidents/report links, protected Lupon cases/hearings/legal holds, audit events, per-recipient notices, leased delivery jobs and provider references. No personally identifying detail in general audit/transport logs. |
 | Files | Private Storage buckets for intake, field and outcome evidence; objects have upload limits, metadata stripping, association, authorization and lifecycle state. Never publish an input photo merely because a case closed. |
 

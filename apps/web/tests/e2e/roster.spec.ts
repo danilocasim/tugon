@@ -5,6 +5,7 @@ import sharp from "sharp";
 import { addDays, manilaDate, slotAt } from "../../src/lib/duty";
 
 import { authenticatorCode, localServices, staffAccount, staffSignIn } from "./local-staff";
+import { expectPortalShell } from "./portal-shell";
 
 test("verified staff roster at phone and desktop and own Tanod schedule", async ({ page, browser }) => {
   test.setTimeout(75_000);
@@ -90,6 +91,9 @@ test("verified staff roster at phone and desktop and own Tanod schedule", async 
     await mobile.getByLabel("Mobile number").fill(phone);
     await mobile.getByRole("button", { name: "Continue" }).click();
     const code = mobile.getByLabel("6-digit code");
+    await code.fill("141628");
+    await mobile.getByRole("button", { name: "Sign in" }).click();
+    await expect(mobile.getByRole("alert").filter({ hasText: "The code wasn't accepted" })).toBeVisible();
     await code.fill("041628");
     await mobile.getByRole("button", { name: "Sign in" }).click();
     await expect(mobile.getByRole("heading", { name: "Duty schedule" })).toBeVisible();
@@ -97,6 +101,7 @@ test("verified staff roster at phone and desktop and own Tanod schedule", async 
     await expect(mobile.getByRole("link", { name: "Schedule" })).toHaveAttribute("aria-current", "page");
     await expect.poll(() => mobile.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
     if (capture) await mobile.screenshot({ path: join(capture, "local-tanod-schedule-390.png"), animations: "disabled", fullPage: true });
+    await expectPortalShell(mobile, { root: "/tanod", landing: "/tanod", navigation: "Tanod", current: /^Now$/u, secondary: /^Schedule$/u });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/barangay/cases/${caseId}`);
     await page.getByRole("button", { name: "Send a tanod", exact: true }).click();
@@ -104,7 +109,7 @@ test("verified staff roster at phone and desktop and own Tanod schedule", async 
     await expect(dialog.getByText(officerName)).toBeVisible();
     await dialog.getByRole("button", { name: "Send Pilot", exact: true }).click();
     await expect(page.getByText("Waiting to accept", { exact: true }).filter({ visible: true })).toBeVisible();
-    await mobile.getByRole("link", { name: "Now", exact: true }).click();
+    await mobile.reload();
     const card = mobile.locator("article").filter({ hasText: task });
     await expect(card).toBeVisible();
     await card.getByRole("button", { name: "Accept", exact: true }).click();
@@ -134,6 +139,21 @@ test("verified staff roster at phone and desktop and own Tanod schedule", async 
     expect(await linked.body()).toEqual(await source.body());
     await mobile.goto("/barangay/tanods");
     await expect(mobile).toHaveURL(/\/barangay\/signin/u);
+    await page.goto("/barangay/tanods");
+    const row = page.getByRole("region", { name: /^Officers/u }).getByRole("listitem").filter({ hasText: officerName });
+    await row.getByRole("button", { name: "Deactivate", exact: true }).click();
+    await page.getByRole("alertdialog").getByRole("button", { name: "Deactivate", exact: true }).click();
+    const reactivate = row.getByRole("button", { name: "Reactivate", exact: true });
+    await expect(reactivate).toBeVisible();
+    try {
+      await mobile.goto("/tanod/schedule");
+      await expect(mobile).toHaveURL(/\/tanod\/signin/u);
+      expect((await mobile.request.get(fieldPhoto)).status()).toBe(404);
+    } finally {
+      await reactivate.click();
+      await page.getByRole("alertdialog").getByRole("button", { name: "Reactivate", exact: true }).click();
+      await expect(row.getByRole("button", { name: "Deactivate", exact: true })).toBeVisible();
+    }
   } finally { await field.close(); }
 });
 
@@ -145,4 +165,7 @@ test("phone-width handlers can consult but not edit the duty roster", async ({ p
   await expect(roster.getByRole("table")).toBeHidden();
   await expect(roster.getByRole("button", { name: /Edit .* shift|Copy last week/u })).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+  await expectPortalShell(page, {
+    root: "/barangay", landing: "/barangay/queue", navigation: "Staff", current: /^(Work )?queue\b/iu, secondary: /^(Mine|My cases)\b/u, forbidden: /^Admin/u,
+  });
 });

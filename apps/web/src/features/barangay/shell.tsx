@@ -226,6 +226,7 @@ export function StaffShell({ children }: { children: ReactNode }) {
             const link = (
               <Link
                 href={item.href}
+                aria-label={item.label}
                 aria-current={on ? "page" : undefined}
                 className={cn(
                   "group relative flex h-10 items-center gap-3 rounded-xl px-2.5 text-[14px] font-semibold text-muted-foreground transition hover:bg-fill hover:text-foreground max-xl:justify-center",
