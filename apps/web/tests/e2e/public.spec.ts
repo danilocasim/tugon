@@ -12,3 +12,8 @@ for (const width of [320, 390, 768, 1440]) {
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
   });
 }
+
+test("resident portal title applies the product name once", async ({ page }) => {
+  await page.goto("/resident");
+  await expect(page).toHaveTitle("Resident portal · Munti Report");
+});
