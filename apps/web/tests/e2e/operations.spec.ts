@@ -20,7 +20,23 @@ async function mailLink(request: APIRequestContext, address: string, kind: "invi
     }
     return !!callback;
   }).toBe(true);
-  return callback!;
+  const url = new URL(callback!);
+  return url.pathname + url.search;
+}
+
+async function prefetchLink(request: APIRequestContext, url: string) {
+  const response = await request.get(url, { maxRedirects: 0 });
+  expect(response.status()).toBe(200);
+  expect(response.headers()["cache-control"]).toContain("no-store");
+  expect(response.headers()["set-cookie"]).toBeUndefined();
+  // HEAD requests also must not spend the token.
+  expect((await request.head(url, { maxRedirects: 0 })).status()).toBe(200);
+  const otherSite = await request.post("/auth/callback", {
+    headers: { origin: "https://other.example.test" },
+    form: Object.fromEntries(new URLSearchParams(url.slice(url.indexOf("?") + 1))),
+    maxRedirects: 0,
+  });
+  expect(otherSite.status()).toBe(403);
 }
 
 test("administrator invites using GoTrue mail and cannot search restricted case data", async ({ page, browser, request }) => {
@@ -59,10 +75,13 @@ test("administrator invites using GoTrue mail and cannot search restricted case 
   await dialog.getByRole("button", { name: "Send invitation" }).click();
   await expect(dialog).toBeHidden();
   const invite = await mailLink(request, invited, "invite");
+  await prefetchLink(request, invite);
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   try {
     const incoming = await context.newPage();
     await incoming.goto(invite);
+    await expect(incoming.getByRole("heading", { name: "Accept your staff invitation" })).toBeVisible();
+    await incoming.getByRole("button", { name: "Continue / Magpatuloy" }).click();
     await expect(incoming.getByRole("heading", { name: "Set your staff password" })).toBeVisible();
     await incoming.getByLabel("Password", { exact: true }).fill(password);
     await incoming.getByRole("button", { name: "Save password" }).click();
@@ -75,7 +94,11 @@ test("administrator invites using GoTrue mail and cannot search restricted case 
       await recovery.getByRole("button", { name: "Forgot your password?" }).click();
       await recovery.getByLabel("Work email").fill(invited);
       await recovery.getByRole("button", { name: "Send reset email" }).click();
-      await recovery.goto(await mailLink(request, invited, "recovery"));
+      const link = await mailLink(request, invited, "recovery");
+      await prefetchLink(request, link);
+      await recovery.goto(link);
+      await expect(recovery.getByRole("heading", { name: "Reset your staff password" })).toBeVisible();
+      await recovery.getByRole("button", { name: "Continue / Magpatuloy" }).click();
       await expect(recovery.getByRole("heading", { name: "Set your staff password" })).toBeVisible();
       const changed = randomUUID();
       await recovery.getByLabel("Password", { exact: true }).fill(changed);
@@ -104,6 +127,7 @@ test("administrator invites using GoTrue mail and cannot search restricted case 
     try {
       const replay = await second.newPage();
       await replay.goto(invite);
+      await replay.getByRole("button", { name: "Continue / Magpatuloy" }).click();
       await expect(replay.getByRole("alert").filter({ hasText: "Open a new invitation" })).toBeVisible();
     } finally { await second.close(); }
   } finally { await context.close(); }
