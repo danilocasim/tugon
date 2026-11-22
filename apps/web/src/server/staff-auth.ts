@@ -41,7 +41,7 @@ export async function prepareStaffFactor() {
       if (removeError) return unavailable();
     }
   }
-  const res = await client.auth.mfa.enroll({ factorType: "totp", issuer: "Tugon", friendlyName: "Tugon Staff" });
+  const res = await client.auth.mfa.enroll({ factorType: "totp", issuer: "Munti Report", friendlyName: "Munti Report Staff" });
   if (res.error || !res.data) return failure("mfa", "We couldn't prepare your authenticator. Try again.");
   return success({ id: res.data.id, qr: res.data.totp.qr_code, secret: res.data.totp.secret });
 }

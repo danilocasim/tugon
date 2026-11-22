@@ -6,10 +6,10 @@ type Job = Database["public"]["Functions"]["lease_one_delivery"]["Returns"][numb
 type Result = { state: "accepted" | "unknown" | "throttled" | "rejected"; id?: string };
 
 function message(job: Job) {
-  if (job.purpose === "assignment") return "Tugon: May bagong assignment. Buksan ang Tugon Tanod para basahin at tanggapin ito.";
-  if (job.kind === "receipt") return `Tugon: Natanggap ang request mo. Reference: ${job.ref}.`;
-  return job.lang === "en" ? `Tugon: There is an update on ${job.ref}. Open your Tugon account or contact the barangay desk.`
-    : `Tugon: May update sa ${job.ref}. Buksan ang Tugon o makipag-ugnayan sa barangay hall.`;
+  if (job.purpose === "assignment") return "Munti Report: May bagong assignment. Buksan ang Munti Report Tanod para basahin at tanggapin ito.";
+  if (job.kind === "receipt") return `Munti Report: Natanggap ang request mo. Reference: ${job.ref}.`;
+  return job.lang === "en" ? `Munti Report: There is an update on ${job.ref}. Open your Munti Report account or contact the barangay desk.`
+    : `Munti Report: May update sa ${job.ref}. Buksan ang Munti Report o makipag-ugnayan sa barangay hall.`;
 }
 
 async function deliver(job: Job): Promise<Result> {
@@ -17,7 +17,7 @@ async function deliver(job: Job): Promise<Result> {
   const email = job.channel === "email";
   const endpoint = email ? "https://api.resend.com/emails" : "https://api.semaphore.co/api/v4/messages";
   const headers = email ? { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json", "Idempotency-Key": `tugon/${job.id}` } : undefined;
-  const body = email ? JSON.stringify({ from: process.env.RESEND_FROM, to: [job.recipient], subject: `Tugon · ${job.ref}`, text })
+  const body = email ? JSON.stringify({ from: process.env.RESEND_FROM, to: [job.recipient], subject: `Munti Report · ${job.ref}`, text })
     : new URLSearchParams({ apikey: process.env.SEMAPHORE_API_KEY!, sendername: process.env.SEMAPHORE_SENDER!, number: job.recipient, message: text });
   try {
     const res = await fetch(endpoint, { method: "POST", headers, body, redirect: "error", signal: AbortSignal.timeout(4_000) });

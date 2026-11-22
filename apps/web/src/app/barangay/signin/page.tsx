@@ -6,7 +6,7 @@ import { publicSettings } from "@/server/resident-data";
 import { consumePasswordSetup } from "@/server/staff-password";
 import { requestAuth } from "@/server/supabase";
 
-export const metadata = { title: "Sign in · Tugon Staff" };
+export const metadata = { title: "Sign in" };
 
 export default async function StaffSignInPage({ searchParams }: PageProps<"/barangay/signin">) {
   const { next, setup } = await searchParams;

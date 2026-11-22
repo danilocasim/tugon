@@ -52,8 +52,8 @@ export function ResidentShell({ children }: { children: ReactNode }) {
           <Link href="/resident" className="flex min-w-0 items-center gap-2.5 rounded-lg">
             <Seal size={36} />
             <span className="min-w-0 leading-tight">
-              <span className="block truncate text-[15px] font-bold tracking-tight">{data?.settings.barangay ?? "Tugon"}</span>
-              {data?.settings.city && <span className="block truncate text-[12px] text-muted-foreground">{data.settings.city} · Tugon</span>}
+              <span className="block truncate text-[15px] font-bold tracking-tight">Munti Report</span>
+              {data?.settings.barangay && <span className="block truncate text-[12px] text-muted-foreground">{data.settings.barangay}</span>}
             </span>
           </Link>
 

@@ -84,13 +84,14 @@ export function ResidentSignIn({ next, pendingProfile }: { next: string; pending
                   <p className="mt-1 text-[15px] text-muted-foreground">{t("signin.why")}</p>
                 </div>
                 <label className="grid gap-1.5">
-                  <span className="text-[14.5px] font-semibold">{t("signin.email")}</span>
+                  <span id="email-label" className="text-[14.5px] font-semibold">{t("signin.email")}</span>
                   <input
                     type="email"
                     autoComplete="email"
                     inputMode="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    aria-labelledby="email-label"
                     aria-invalid={error?.field === "email" || undefined}
                     aria-describedby={error ? "email-error" : undefined}
                     className={fieldClass}
@@ -112,13 +113,14 @@ export function ResidentSignIn({ next, pendingProfile }: { next: string; pending
                   <p className="mt-1 text-[15px] text-muted-foreground">{t("signin.sentTo", { email })}</p>
                 </div>
                 <label className="grid gap-1.5">
-                  <span className="text-[14.5px] font-semibold">{t("signin.code")}</span>
+                  <span id="code-label" className="text-[14.5px] font-semibold">{t("signin.code")}</span>
                   <input
                     inputMode="numeric"
                     autoComplete="one-time-code"
                     maxLength={6}
                     value={code}
                     onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+                    aria-labelledby="code-label"
                     aria-invalid={error?.field === "code" || undefined}
                     aria-describedby={error ? "code-hint code-error" : "code-hint"}
                     className={cn(fieldClass, "h-14 text-center font-mono text-[26px] tracking-[0.5em]")}

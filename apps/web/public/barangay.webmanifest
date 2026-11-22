@@ -1,6 +1,6 @@
 {
-  "name": "Tugon Staff",
-  "short_name": "Tugon Staff",
+  "name": "Munti Report Staff",
+  "short_name": "Munti Staff",
   "description": "Intake, work queue, cases and hotspots for barangay staff.",
   "id": "/barangay",
   "start_url": "/barangay",

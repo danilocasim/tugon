@@ -5,7 +5,7 @@ import { DeskWorkspace } from "@/features/barangay/workspace";
 import { adminTab } from "@/server/admin-data";
 import { requirePortal } from "@/server/identity";
 
-export const metadata = { title: "Administration · Tugon Staff" };
+export const metadata = { title: "Administration" };
 
 export default async function AdminPage({ searchParams }: PageProps<"/barangay/admin">) {
   const { tab: key, person, invite } = await searchParams;

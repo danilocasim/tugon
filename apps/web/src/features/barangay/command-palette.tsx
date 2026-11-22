@@ -179,7 +179,7 @@ export function CommandPalette({ open, onOpenChange, nav }: { open: boolean; onO
         showCloseButton={false}
         className="top-3 max-w-[calc(100%-1.5rem)] translate-y-0 gap-0 overflow-hidden rounded-[24px] bg-card p-0 text-foreground shadow-float ring-0 sm:top-[12vh] sm:max-w-[640px]"
       >
-        <DialogTitle className="sr-only">{t("Search Tugon")}</DialogTitle>
+        <DialogTitle className="sr-only">{t("Search Munti Report")}</DialogTitle>
         <DialogDescription className="sr-only">{t("Find a case by reference, words, place or person, jump to a page, or run an action.")}</DialogDescription>
         <PaletteBody nav={nav} close={() => onOpenChange(false)} />
       </DialogContent>
@@ -315,7 +315,7 @@ function PaletteBody({ nav, close }: { nav: NavItem[]; close: () => void }) {
   const tip = nav[0];
 
   return (
-    <Command label={t("Search Tugon")} loop filter={matchScore} className="flex flex-col">
+    <Command label={t("Search Munti Report")} loop filter={matchScore} className="flex flex-col">
       <div className="flex items-center gap-3 border-b border-hairline px-4">
         <Search className="size-5 shrink-0 text-ink-3" />
         <Command.Input

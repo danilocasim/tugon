@@ -7,10 +7,13 @@ import { fileURLToPath } from "node:url";
 // Emit an installable Coolify Compose definition. No secret is needed to render it.
 const upstream = "76883d49435524645397b9f7a0048d92f69b8330";
 const repo = fileURLToPath(new URL("../../", import.meta.url));
-const [appOrigin, network, revision] = process.argv.slice(2);
+const [appOrigin, network, revision, mailMode, ...extra] = process.argv.slice(2);
+const resendTest = mailMode === "--resend-test";
 if (!/^https:\/\/[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/u.test(appOrigin ?? "")
-    || !/^[a-z0-9-]+$/u.test(network ?? "") || !/^[0-9a-f]{40}$/u.test(revision ?? "")) {
-  throw new Error("Usage: node ops/coolify/build-synthetic-supabase.mjs <https-origin> <private-network> <git-commit>");
+    || !/^[a-z0-9-]+$/u.test(network ?? "") || !/^[0-9a-f]{40}$/u.test(revision ?? "")
+    || extra.length || (mailMode !== undefined && !resendTest)
+    || (resendTest && !/^https:\/\/muntireport(?:\.\d{1,3}){4}\.sslip\.io$/u.test(appOrigin))) {
+  throw new Error("Usage: node ops/coolify/build-synthetic-supabase.mjs <https-origin> <private-network> <git-commit> [--resend-test]");
 }
 const selected = ["db", "auth", "rest", "realtime", "storage", "imgproxy", "api-gw"];
 const reference = (name) => `\${PULONG_${name}:?Missing staging runtime input}`;
@@ -49,7 +52,7 @@ const fixed = {
   ADDITIONAL_REDIRECT_URLS: `${appOrigin}/auth/callback`, DISABLE_SIGNUP: "true",
   ENABLE_ANONYMOUS_USERS: "false", ENABLE_EMAIL_AUTOCONFIRM: "false", ENABLE_EMAIL_SIGNUP: "true",
   ENABLE_PHONE_AUTOCONFIRM: "false", ENABLE_PHONE_SIGNUP: "false",
-  SMTP_ADMIN_EMAIL: "no-reply@example.test", SMTP_HOST: "mailpit", SMTP_PORT: "1025", SMTP_USER: "", SMTP_PASS: "", SMTP_SENDER_NAME: "Pulong staging",
+  SMTP_ADMIN_EMAIL: "no-reply@example.test", SMTP_HOST: "mailpit", SMTP_PORT: "1025", SMTP_USER: "", SMTP_PASS: "", SMTP_SENDER_NAME: "Munti Report",
   MAILER_URLPATHS_CONFIRMATION: "/auth/v1/verify", MAILER_URLPATHS_EMAIL_CHANGE: "/auth/v1/verify",
   MAILER_URLPATHS_INVITE: "/auth/v1/verify", MAILER_URLPATHS_RECOVERY: "/auth/v1/verify",
   PGRST_DB_SCHEMAS: "public,storage,graphql_public", PGRST_DB_MAX_ROWS: "1000", PGRST_DB_EXTRA_SEARCH_PATH: "public,extensions",
@@ -98,15 +101,26 @@ await Promise.all(selected.map(async (name) => {
   if (name === "auth") {
     service.environment.GOTRUE_MAILER_OTP_LENGTH = "6";
     service.environment.GOTRUE_MAILER_OTP_EXP = "600";
+    if (resendTest) {
+      Object.assign(service.environment, {
+        // Keep the verified sender until a Munti Report mail domain and scoped key are ready.
+        GOTRUE_SMTP_ADMIN_EMAIL: "no-reply@pulong.danilocasim.dev",
+        GOTRUE_SMTP_HOST: "smtp.resend.com",
+        GOTRUE_SMTP_PORT: "587",
+        GOTRUE_SMTP_USER: "resend",
+        GOTRUE_SMTP_PASS: reference("RESEND_SMTP_KEY"),
+      });
+    }
     for (const [kind, file] of [["MAGIC_LINK", "magic-link"], ["CONFIRMATION", "confirmation"], ["INVITE", "invite"], ["RECOVERY", "recovery"]]) {
       service.environment[`GOTRUE_MAILER_TEMPLATES_${kind}`] = `http://edge-realtime:8081/${file}.html`;
     }
   }
   if (name === "storage") {
     service.environment.FILE_SIZE_LIMIT = "5242880";
-    // Mount the operator probe privately so a manual Coolify task can use a short command.
-    mount(service, "synthetic-auth-smoke", "/opt/pulong/smoke-synthetic-auth.mjs",
-      await readFile(new URL("smoke-synthetic-auth.mjs", import.meta.url), "utf8"));
+    // Only the selected manual probe can run; Auth mail goes to one transport at a time.
+    const script = resendTest ? "provision-resend-test-resident.mjs" : "smoke-synthetic-auth.mjs";
+    if (resendTest) service.environment.PULONG_RESEND_TEST_EMAIL = reference("RESEND_TEST_EMAIL");
+    mount(service, resendTest ? "resend-test-resident" : "synthetic-auth-smoke", `/opt/pulong/${script}`, await readFile(new URL(script, import.meta.url), "utf8"));
   }
   model.services[name] = service;
 }));
@@ -142,7 +156,7 @@ const migrator = model.services.migrate = {
   image: "node:24.16.0-bookworm-slim", restart: "no", working_dir: "/tugon", environment: { PGPASSWORD: replacements.POSTGRES_PASSWORD },
   depends_on: Object.fromEntries(["db", "auth", "rest", "realtime", "storage"].map((name) => [name, { condition: "service_healthy" }])),
   // The Postgres DSN must not appear in Coolify's Compose or task logs.
-  command: ["sh", "-ec", 'if npx --yes supabase@2.113.0 db push --db-url "postgresql://postgres:$$PGPASSWORD@db:5432/postgres?sslmode=disable" >/tmp/migrate.log 2>&1; then echo "Tugon migrations applied"; else echo "Tugon migrations failed; inspect locally without printing the DSN" >&2; exit 1; fi'],
+  command: ["sh", "-ec", 'if npx --yes supabase@2.113.0 db push --db-url "postgresql://postgres:$$PGPASSWORD@db:5432/postgres?sslmode=disable" >/tmp/migrate.log 2>&1; then echo "Munti Report migrations applied"; else echo "Munti Report migrations failed; inspect locally without printing the DSN" >&2; exit 1; fi'],
 };
 mount(migrator, "migration-config", "/tugon/supabase/config.toml", 'project_id = "pulong-synthetic"\n[db]\nmajor_version = 17\n[db.seed]\nenabled = false\n');
 const files = git("ls-tree", "-r", "--name-only", revision, "supabase/migrations").trim().split("\n");

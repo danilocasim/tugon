@@ -198,7 +198,7 @@ export function StaffShell({ children }: { children: ReactNode }) {
         <div className="flex h-16 items-center gap-2.5 px-5 xl:px-5">
           <Mark size={32} />
           <span className="hidden leading-tight xl:block">
-            <span className="block text-[15px] font-bold tracking-tight">Tugon</span>
+            <span className="block text-[15px] font-bold tracking-tight">Munti Report</span>
             <span className="block text-[11.5px] text-muted-foreground">{data.settings.barangay}</span>
           </span>
         </div>
@@ -291,7 +291,7 @@ export function StaffShell({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-30 flex h-14 items-center gap-2.5 bg-background/85 px-4 backdrop-blur-xl backdrop-saturate-150 md:hidden print:hidden">
           <Mark size={28} />
           <span className="min-w-0 flex-1 leading-tight">
-            <span className="block truncate text-[14px] font-bold">{t("Tugon · Staff")}</span>
+            <span className="block truncate text-[14px] font-bold">Munti Report · Staff</span>
             <span className="block truncate text-[11px] text-muted-foreground">
               {me.name.split(" ").slice(-2).join(" ")} · {t(ROLE[me.role].en)}
             </span>

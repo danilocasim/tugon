@@ -72,7 +72,7 @@ export function StaffSignIn({ next, barangay, startingName, canSetPassword, pass
       router.refresh();
     });
   }
-  const heading = step === "password" ? "Set your staff password" : step === "reset" ? "Reset your password" : "Sign in to Tugon";
+  const heading = step === "password" ? "Set your staff password" : step === "reset" ? "Reset your password" : "Sign in to Munti Report";
   const button = step === "password" ? "Save password" : step === "reset" ? "Send reset email" : "Continue";
   const feedback = <>
     {error && <p role="alert" className="text-[13px] font-semibold text-high">{t(error)}</p>}
@@ -110,11 +110,11 @@ export function StaffSignIn({ next, barangay, startingName, canSetPassword, pass
       <main className="flex flex-col px-5 py-6 sm:px-10">
         <div className="flex items-center justify-between">
           <Link href="/" className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="size-4" /> Tugon
+            <ArrowLeft className="size-4" /> Munti Report
           </Link>
           <div className="flex items-center gap-3">
             <button type="button" onClick={() => setStaffLang(lang === "en" ? "fil" : "en")} className="min-h-11 rounded-full bg-fill px-3 text-[13px] font-bold">{lang === "en" ? "Filipino" : "English"}</button>
-            <span className="flex items-center gap-2 lg:hidden"><Mark size={26} /><span className="text-[14px] font-bold">Tugon</span></span>
+            <span className="flex items-center gap-2 lg:hidden"><Mark size={26} /><span className="text-[14px] font-bold">Munti Report</span></span>
           </div>
         </div>
 

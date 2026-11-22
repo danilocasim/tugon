@@ -9,8 +9,8 @@ const sans = Atkinson_Hyperlegible_Next({ subsets: ["latin"], variable: "--font-
 const mono = Atkinson_Hyperlegible_Mono({ subsets: ["latin"], variable: "--font-atkinson-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: { default: "Tugon · Barangay service requests", template: "%s · Tugon" },
-  description: "Tugon resident reporting and barangay case management.",
+  title: { default: "Munti Report · Barangay service requests", template: "%s · Munti Report" },
+  description: "Munti Report resident reporting and barangay case management.",
   icons: { icon: "/icons/icon-192.png", apple: "/icons/apple-touch-180.png" },
 };
 

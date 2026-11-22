@@ -156,8 +156,8 @@ const fil: Record<string, string> = {
   "Follow-up": "Follow-up",
   "Full case": "Buong kaso",
   "Resident says someone is in danger now.": "Sabi ng residente, may nasa panganib ngayon.",
-  "Send or call the tanod on duty, or call back. Tugon isn't a dispatch system; the resident was told to call 911.":
-    "Magpadala o tawagan ang naka-duty na tanod, o tawagan pabalik ang residente. Hindi dispatch system ang Tugon; sinabihan ang residente na tumawag sa 911.",
+  "Munti Report isn't a dispatch system; the resident was told to call 911.":
+    "Hindi dispatch system ang Munti Report; sinabihan ang residente na tumawag sa 911.",
   "Waiting on resident since {time}": "Hinihintay ang sagot ng residente mula {time}",
   "Possible duplicates nearby": "Posibleng duplicate sa malapit",
   Link: "I-link",

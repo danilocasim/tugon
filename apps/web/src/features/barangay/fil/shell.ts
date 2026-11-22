@@ -25,7 +25,6 @@ const fil: Record<string, string> = {
   "Walk-in / phone": "Walk-in / tawag",
   "Live · updates arrive instantly": "Live · agad dumarating ang update",
   "Reconnecting…": "Kumokonekta ulit…",
-  "Tugon · Staff": "Tugon · Staff",
   "Account and persona": "Account at persona",
   Language: "Wika",
   "Sign out": "Mag-sign out",
@@ -69,7 +68,7 @@ const fil: Record<string, string> = {
   Cancel: "Kanselahin",
 
   // Command palette
-  "Search Tugon": "Maghanap sa Tugon",
+  "Search Munti Report": "Maghanap sa Munti Report",
   "Find a case by reference, words, place or person, jump to a page, or run an action.":
     "Maghanap ng kaso ayon sa reference, salita, lugar o tao, pumunta sa isang pahina, o gumawa ng aksyon.",
   "Triage the next report": "I-triage ang susunod na ulat",
@@ -109,7 +108,7 @@ const fil: Record<string, string> = {
   "Model suggestions you confirm, never auto-decide": "Mungkahi ng model na ikaw ang kumukumpirma, hindi kusang nagpapasya",
   "A queue ranked by urgency, with aging": "Pilang inayos ayon sa urgency at tagal ng hintay",
   "Hotspots from where residents report": "Mga hotspot mula sa mga lugar na inuulat ng residente",
-  "Sign in to Tugon": "Mag-sign in sa Tugon",
+  "Sign in to Munti Report": "Mag-sign in sa Munti Report",
   "Staff accounts use a password and an authenticator code.": "Gumagamit ng password at authenticator code ang mga account ng staff.",
   "Demo account": "Demo account",
   "Work email": "Email sa trabaho",

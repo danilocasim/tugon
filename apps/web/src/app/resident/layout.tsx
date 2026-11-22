@@ -5,9 +5,9 @@ import { ResidentShell } from "@/features/resident/shell";
 import { residentSnapshot } from "@/server/resident-data";
 
 export const metadata: Metadata = {
-  title: { default: "Resident portal", template: "%s · Tugon" },
+  title: { default: "Resident portal · Munti Report", template: "%s · Munti Report" },
   manifest: "/resident.webmanifest",
-  appleWebApp: { capable: true, title: "Tugon", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "Munti Report", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = { themeColor: "#f2f1ed" };

@@ -1,10 +1,10 @@
 /*
-  Tugon service worker.
+  Munti Report service worker.
   Caches only static, non-personal assets and one generic offline page.
   Never caches signed-in pages, API responses, photos, or locations.
 */
 const PREFIX = "tugon-mvp-";
-const VERSION = `${PREFIX}1`;
+const VERSION = `${PREFIX}2`;
 const PRECACHE = ["/offline.html", "/icons/icon-192.png", "/icons/icon-512.png", "/resident.webmanifest", "/barangay.webmanifest", "/tanod.webmanifest"];
 
 self.addEventListener("install", (event) => {

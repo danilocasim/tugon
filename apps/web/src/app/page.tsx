@@ -17,7 +17,7 @@ export default function PortalEntry() {
       <header className="mx-auto flex max-w-6xl items-center gap-3 px-5 py-5 sm:px-8">
         <Mark size={34} />
         <span className="leading-tight">
-          <span className="block text-[16px] font-bold tracking-tight">Tugon</span>
+          <span className="block text-[16px] font-bold tracking-tight">Munti Report</span>
           <span className="block text-[12px] text-muted-foreground">Barangay service requests</span>
         </span>
       </header>
@@ -26,7 +26,7 @@ export default function PortalEntry() {
           <h1 className="max-w-3xl text-[36px] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[52px]">From a resident&apos;s phone to the barangay&apos;s queue.</h1>
           <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground">Report a concern, follow its progress, or open your barangay workspace.</p>
         </div>
-        <nav aria-label="Tugon portals" className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <nav aria-label="Munti Report portals" className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {portals.map(({ href, title, subtitle, icon: Icon, mark: PortalMark, items, action }) => (
             <Link key={href} href={href} className="group grid gap-5 rounded-[28px] bg-card p-6 shadow-sheet transition motion-safe:hover:-translate-y-0.5 hover:shadow-lift sm:p-7">
               <span className="flex items-center justify-between gap-3">

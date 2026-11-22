@@ -1,6 +1,6 @@
 {
-  "name": "Tugon Tanod",
-  "short_name": "Tanod",
+  "name": "Munti Report Tanod",
+  "short_name": "Munti Tanod",
   "description": "Field assignments, duty schedule and field reports for barangay tanods.",
   "id": "/tanod",
   "start_url": "/tanod",

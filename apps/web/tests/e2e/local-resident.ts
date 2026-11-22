@@ -28,9 +28,16 @@ export async function signUp(page: Page, request: APIRequestContext, start: stri
   const email = `resident-${randomUUID()}@example.com`;
   await page.goto(start);
   await page.getByRole("radio", { name: "EN" }).last().click();
-  await page.getByLabel("Email", { exact: true }).fill(email);
-  await page.getByRole("button", { name: "Send code" }).click();
-  const field = page.getByLabel("6-digit code from your email");
+  const emailField = page.getByRole("textbox", { name: "Email", exact: true });
+  const send = page.getByRole("button", { name: "Send code" });
+  if (verifyErrors) {
+    await emailField.fill("invalid-address");
+    await send.click();
+    await expect(page.getByRole("alert").filter({ hasText: "Enter a valid email address." })).toBeVisible();
+  }
+  await emailField.fill(email);
+  await send.click();
+  const field = page.getByRole("textbox", { name: "6-digit code from your email", exact: true });
   await expect(field).toBeVisible();
   let message = await latestCode(request, inbox, email);
   if (verifyErrors) {

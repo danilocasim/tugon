@@ -223,7 +223,7 @@ export function TriageWorkspace({ r, onDone }: { r: StaffRequest; onDone?: (acti
             <div role="alert" className="flex gap-3 rounded-2xl bg-high p-3.5 text-white">
               <AlertTriangle className="mt-0.5 size-5 shrink-0" />
               <p className="text-[13.5px] leading-snug">
-                <strong>{t("Resident says someone is in danger now.")}</strong> {t("Tugon isn't a dispatch system; the resident was told to call 911.")}
+                <strong>{t("Resident says someone is in danger now.")}</strong> {t("Munti Report isn't a dispatch system; the resident was told to call 911.")}
               </p>
             </div>
             <OnDutyNow r={r} />

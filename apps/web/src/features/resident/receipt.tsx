@@ -57,7 +57,7 @@ export function Receipt({ report: r, settings, replayed }: ReceiptProps) {
         className="origin-top drop-shadow-[0_14px_24px_rgb(18_24_32/0.12)]"
       >
         <div className="perforated bg-card px-6 pt-7 pb-6">
-          <p className="text-center font-mono text-[10.5px] font-semibold tracking-[0.22em] text-ink-3 uppercase">Tugon · {settings.barangay}</p>
+          <p className="text-center font-mono text-[10.5px] font-semibold tracking-[0.22em] text-ink-3 uppercase">Munti Report · {settings.barangay}</p>
           <div className="my-4 border-t border-dashed border-input" />
           <p className="text-center text-[12px] font-semibold tracking-[0.1em] text-ink-3 uppercase">{t("receipt.ref")}</p>
           <p className="mt-1 text-center font-mono text-[28px] font-semibold tracking-[0.04em] tabular">{r.ref}</p>

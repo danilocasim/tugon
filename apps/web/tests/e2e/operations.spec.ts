@@ -44,7 +44,7 @@ test("administrator invites using GoTrue mail and cannot search restricted case 
     await expect(nav.locator(`a[href$="tab=${tab}"]`)).toHaveAttribute("aria-current", "page");
   }
   await page.keyboard.press("/");
-  const finder = page.getByRole("dialog", { name: "Search Tugon" });
+  const finder = page.getByRole("dialog", { name: "Search Munti Report" });
   const search = finder.getByRole("combobox");
   await expect(search).toBeFocused();
   await search.fill(title);
@@ -66,7 +66,7 @@ test("administrator invites using GoTrue mail and cannot search restricted case 
     await expect(incoming.getByRole("heading", { name: "Set your staff password" })).toBeVisible();
     await incoming.getByLabel("Password", { exact: true }).fill(password);
     await incoming.getByRole("button", { name: "Save password" }).click();
-    await expect(incoming.getByRole("heading", { name: "Sign in to Tugon" })).toBeVisible();
+    await expect(incoming.getByRole("heading", { name: "Sign in to Munti Report" })).toBeVisible();
     const factorSecret = await staffSignIn(incoming, { email: invited, password }, "/barangay/queue");
     const recoveryContext = await browser.newContext();
     try {
@@ -81,7 +81,7 @@ test("administrator invites using GoTrue mail and cannot search restricted case 
       await recovery.getByLabel("Password", { exact: true }).fill(changed);
       await recovery.getByLabel("Authenticator code").fill(authenticatorCode(factorSecret));
       await recovery.getByRole("button", { name: "Save password" }).click();
-      await expect(recovery.getByRole("heading", { name: "Sign in to Tugon" })).toBeVisible();
+      await expect(recovery.getByRole("heading", { name: "Sign in to Munti Report" })).toBeVisible();
       await recovery.getByLabel("Work email").fill(invited);
       await recovery.getByLabel("Password", { exact: true }).fill(changed);
       await recovery.getByRole("button", { name: "Continue", exact: true }).click();

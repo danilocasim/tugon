@@ -3,7 +3,7 @@ import { KpDocument } from "@/features/barangay/lupon-print";
 import { DeskWorkspace } from "@/features/barangay/workspace";
 import { isUUID } from "@/lib/uuid";
 
-export const metadata = { title: "Lupon document · Tugon Staff" };
+export const metadata = { title: "Lupon document" };
 
 export default async function ProceedingPrint({ params, searchParams }: PageProps<"/barangay/lupon/[id]/print">) {
   const { id } = await params;

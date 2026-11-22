@@ -5,7 +5,7 @@ import { isUUID } from "@/lib/uuid";
 import { requirePortal } from "@/server/identity";
 import { readStaffCase } from "@/server/staff-data";
 
-export const metadata = { title: "Case · Tugon Staff" };
+export const metadata = { title: "Case" };
 
 export default async function CasePage({ params }: PageProps<"/barangay/cases/[id]">) {
   const { id } = await params;

@@ -1,6 +1,6 @@
 {
-  "name": "Tugon · Resident portal",
-  "short_name": "Tugon",
+  "name": "Munti Report · Resident portal",
+  "short_name": "Munti Report",
   "description": "Report concerns and request barangay services, then track every update.",
   "id": "/resident",
   "start_url": "/resident",

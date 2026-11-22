@@ -8,8 +8,8 @@ services:
     ports: !reset []
   auth:
     environment:
-      GOTRUE_SITE_URL: ${TUGON_ORIGIN:?Set the canonical Tugon HTTPS origin}
-      GOTRUE_URI_ALLOW_LIST: ${TUGON_ORIGIN:?Set the canonical Tugon HTTPS origin}/auth/callback
+      GOTRUE_SITE_URL: ${TUGON_ORIGIN:?Set the canonical Munti Report HTTPS origin}
+      GOTRUE_URI_ALLOW_LIST: ${TUGON_ORIGIN:?Set the canonical Munti Report HTTPS origin}/auth/callback
       GOTRUE_DISABLE_SIGNUP: 'false'
       GOTRUE_EXTERNAL_EMAIL_ENABLED: 'true'
       GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: 'false'
@@ -25,7 +25,7 @@ services:
       GOTRUE_SMTP_USER: resend
       GOTRUE_SMTP_PASS: ${RESEND_SMTP_KEY:?Set the staging or production Resend SMTP key}
       GOTRUE_SMTP_ADMIN_EMAIL: ${RESEND_SMTP_FROM:?Set the approved sending address}
-      GOTRUE_SMTP_SENDER_NAME: Tugon
+      GOTRUE_SMTP_SENDER_NAME: Munti Report
       GOTRUE_EXTERNAL_PHONE_ENABLED: ${TUGON_GOTRUE_PHONE_ENABLED:-false}
       GOTRUE_SMS_AUTOCONFIRM: 'false'
       GOTRUE_SMS_OTP_LENGTH: '6'

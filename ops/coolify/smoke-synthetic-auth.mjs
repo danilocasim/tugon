@@ -1,12 +1,12 @@
 import { randomUUID } from "node:crypto";
 import { setTimeout } from "node:timers/promises";
 
-// Run inside the Pulong synthetic Supabase Storage container, not on a public gateway.
+// Run inside Munti Report's synthetic Supabase Storage container, not on a public gateway.
 const [origin] = process.argv.slice(2);
 const { ANON_KEY: anon, SERVICE_KEY: service } = process.env;
 const gateway = "http://api-gw:8000";
 const mailbox = "http://mailpit:8025/api/v1";
-const name = "Synthetic Pulong Resident";
+const name = "Synthetic Munti Report Resident";
 const email = `synthetic-smoke-${randomUUID()}@example.test`;
 const cookieKey = "sb-pulong-supabase-gateway-auth-token";
 let phase = "staging preflight";
@@ -32,7 +32,7 @@ async function json(response, status = 200) {
   return response.json();
 }
 async function run() {
-  const hosted = origin === process.env.STORAGE_PUBLIC_URL && /^https:\/\/pulong(?:\.\d{1,3}){4}\.sslip\.io$/u.test(origin ?? "");
+  const hosted = origin === process.env.STORAGE_PUBLIC_URL && /^https:\/\/muntireport(?:\.\d{1,3}){4}\.sslip\.io$/u.test(origin ?? "");
   const syntheticOrigin = hosted || origin === "http://pulong-smoke-web:3000";
   requireCheck(anon && service && syntheticOrigin);
   const auth = await json(await privateRequest("/auth/v1/settings"));
@@ -91,10 +91,10 @@ async function run() {
   const snapshot = await json(resident);
   requireCheck(snapshot.me?.id === user.id && snapshot.me?.name === name);
   requireCheck((await request(`${origin}/api/resident/export`)).status === 401);
-  console.log("Pulong synthetic smoke passed: private email, one-use OTP, SSR refresh, anonymous denial and unchanged release flags.");
+  console.log("Munti Report synthetic smoke passed: private email, one-use OTP, SSR refresh, anonymous denial and unchanged release flags.");
 }
 
 await run().catch(() => {
-  console.error(`Pulong synthetic smoke failed during ${phase}. No response bodies or credentials were logged.`);
+  console.error(`Munti Report synthetic smoke failed during ${phase}. No response bodies or credentials were logged.`);
   process.exitCode = 1;
 });

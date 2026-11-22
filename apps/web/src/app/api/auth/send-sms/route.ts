@@ -46,7 +46,7 @@ export async function POST(request: Request) {
   if (lease !== "leased") return response(403);
   try {
     const result = await fetch("https://api.semaphore.co/api/v4/otp", {
-      method: "POST", body: new URLSearchParams({ apikey: key, number: phone, sendername: sender, code: payload.sms.otp, message: "Tugon: {otp} is your verification code. Do not share it." }),
+      method: "POST", body: new URLSearchParams({ apikey: key, number: phone, sendername: sender, code: payload.sms.otp, message: "Munti Report: {otp} is your verification code. Do not share it." }),
       redirect: "error", signal: AbortSignal.timeout(2500),
     });
     if (!result.ok) return response(503);

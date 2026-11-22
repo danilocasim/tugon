@@ -5,7 +5,7 @@
 import type { Lang } from "@/lib/domain";
 
 const fil = {
-  "app.name": "Tugon Tanod",
+  "app.name": "Munti Report Tanod",
   "nav.now": "Ngayon",
   "nav.schedule": "Iskedyul",
   "nav.history": "Kasaysayan",
@@ -116,7 +116,7 @@ const fil = {
   "hist.empty": "Wala pang natapos na assignment.",
   "hist.onScene": "{dur} sa lugar",
 
-  "si.title": "Mag-sign in sa Tugon Tanod",
+  "si.title": "Mag-sign in sa Munti Report Tanod",
   "si.sub": "Gamitin ang mobile number mo. Magpapadala kami ng code sa SMS.",
   "si.account": "Demo na account",
   "si.mobile": "Mobile number",
@@ -127,7 +127,7 @@ const fil = {
   "si.codeHint": "Gamitin ang pinakabagong code mula sa SMS.",
   "si.verify": "Mag-sign in",
   "si.other": "Ibang account",
-  "si.hub": "Tugon",
+  "si.hub": "Munti Report",
 
   "toast.new": "Bagong assignment",
   "toast.accepted": "Natanggap. Ingat sa daan.",
@@ -139,7 +139,7 @@ const fil = {
 };
 
 const en: Record<keyof typeof fil, string> = {
-  "app.name": "Tugon Tanod",
+  "app.name": "Munti Report Tanod",
   "nav.now": "Now",
   "nav.schedule": "Schedule",
   "nav.history": "History",
@@ -250,7 +250,7 @@ const en: Record<keyof typeof fil, string> = {
   "hist.empty": "No finished assignments yet.",
   "hist.onScene": "{dur} on scene",
 
-  "si.title": "Sign in to Tugon Tanod",
+  "si.title": "Sign in to Munti Report Tanod",
   "si.sub": "Use your mobile number. We'll text you a code.",
   "si.account": "Demo account",
   "si.mobile": "Mobile number",
@@ -261,7 +261,7 @@ const en: Record<keyof typeof fil, string> = {
   "si.codeHint": "Use the most recent code from your text messages.",
   "si.verify": "Sign in",
   "si.other": "Use a different account",
-  "si.hub": "Tugon",
+  "si.hub": "Munti Report",
 
   "toast.new": "New assignment",
   "toast.accepted": "Accepted. Stay safe on the way.",
