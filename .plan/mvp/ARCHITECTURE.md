@@ -29,7 +29,7 @@ The pilot serves one barangay, with settings (name, service hours, contacts, act
 
 | Portal | Production flow | Enforced gates |
 | --- | --- | --- |
-| Resident | Supabase email OTP for signup/sign-in; use Resend SMTP and a six-digit code template on both relevant first-time and returning mail flows. Complete localized profile and consent before submitting. | Verified mailbox, active profile and row ownership. Safe allowlisted return route. |
+| Resident | Supabase email OTP for signup/sign-in; use Resend SMTP and a six-digit code template on both first-time and returning mail flows. Invite-only by default; when enabled, public enrollment checks Turnstile hostname and action before asking the private Auth gateway to create the user or send a code. | Verified mailbox, active profile and row ownership. Safe allowlisted return route. |
 | Staff and admin | Invite-only enrollment, verified work email (Resend), password/reset, and app authenticator (TOTP). Administrators manage staff; supervisors and administrators manage tanods. | Active role/team membership plus `aal2` on protected pages, reads, writes, media and permitted subscriptions. Staff/admin role never comes from signup metadata. |
 | Tanod | Pre-provision a mobile identity; Supabase Phone Auth verifies possession during sign-in. A signed Supabase Send SMS Hook can pass the exact Supabase-generated code to Semaphore's OTP route. | Active officer record keyed by Auth user, normalized `+63` phone, no public officer enrollment, bounded attempts/resends and scoped assigned-case access. |
 

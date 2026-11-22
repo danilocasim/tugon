@@ -10,6 +10,7 @@ import { useAct } from "@/hooks/use-live";
 import { PUROKS } from "@/lib/geo";
 import { cn } from "@/lib/utils";
 import { createResidentAccount, sendResidentCode, signInResident } from "@/server/resident-auth";
+import { EmailChallenge } from "./email-challenge";
 import { useT } from "./lang";
 import { LangSwitch } from "./ui";
 
@@ -19,7 +20,12 @@ export const fieldClass = "field h-12 w-full rounded-2xl px-4 text-[16px]";
 export const primaryBtn =
   "inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-[16px] font-bold text-primary-foreground shadow-press transition hover:bg-brand-deep active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none";
 
-export function ResidentSignIn({ next, pendingProfile }: { next: string; pendingProfile: boolean }) {
+export function ResidentSignIn({ next, pendingProfile, enrollmentMode, challenge }: {
+  next: string;
+  pendingProfile: boolean;
+  enrollmentMode: "invite" | "public" | "unavailable";
+  challenge?: { siteKey: string; action: string };
+}) {
   const { t, lang } = useT();
   const router = useRouter();
   const { act, pending } = useAct();
@@ -30,13 +36,26 @@ export function ResidentSignIn({ next, pendingProfile }: { next: string; pending
   const [purok, setPurok] = useState("");
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState<{ field?: string; message: string } | null>(null);
+  const [challengeToken, setChallengeToken] = useState<string | null>(null);
+  const [challengeAttempt, setChallengeAttempt] = useState(0);
 
   async function onEmail(e: FormEvent) {
     e.preventDefault();
-    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return setError({ field: "email", message: lang === "fil" ? "Maglagay ng tamang email." : "Enter a valid email address." });
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return setError({ field: "email", message: t("signin.invalidEmail") });
+    if (challenge && !challengeToken) return setError({ field: "challenge", message: t("signin.challengeRequired") });
     setError(null);
-    const result = await act("email", () => sendResidentCode(email), { quiet: true });
-    if (!result.ok) return setError({ field: "email", message: result.message });
+    const result = await act("email", () => sendResidentCode(email, challengeToken), { quiet: true });
+    if (challenge) {
+      setChallengeToken(null);
+      setChallengeAttempt((attempt) => attempt + 1);
+    }
+    if (!result.ok) {
+      const message = result.code === "challenge" ? t("signin.challengeRequired")
+        : result.code === "rate_limit" ? t("signin.rateLimit")
+        : result.code === "invalid" ? t("signin.invalidEmail")
+        : t("signin.deliveryFailed");
+      return setError({ field: result.code === "challenge" ? "challenge" : "email", message });
+    }
     setCode("");
     setStep("code");
   }
@@ -82,6 +101,8 @@ export function ResidentSignIn({ next, pendingProfile }: { next: string; pending
                 <div>
                   <h1 className="text-[24px] font-bold tracking-tight">{t("signin.title")}</h1>
                   <p className="mt-1 text-[15px] text-muted-foreground">{t("signin.why")}</p>
+                  {enrollmentMode === "invite" && <p className="mt-2 text-[13.5px] text-muted-foreground">{t("signin.inviteOnly")}</p>}
+                  {enrollmentMode === "unavailable" && <p role="alert" className="mt-2 text-[13.5px] font-semibold text-high">{t("signin.challengeUnavailable")}</p>}
                 </div>
                 <label className="grid gap-1.5">
                   <span id="email-label" className="text-[14.5px] font-semibold">{t("signin.email")}</span>
@@ -93,14 +114,16 @@ export function ResidentSignIn({ next, pendingProfile }: { next: string; pending
                     onChange={(e) => setEmail(e.target.value)}
                     aria-labelledby="email-label"
                     aria-invalid={error?.field === "email" || undefined}
-                    aria-describedby={error ? "email-error" : undefined}
+                    aria-describedby={error?.field === "email" ? "email-error" : undefined}
                     className={fieldClass}
                     placeholder="pangalan@email.com"
                     autoFocus
                   />
                   {err("email")}
                 </label>
-                <button type="submit" disabled={pending !== null} className={primaryBtn}>
+                {challenge && <EmailChallenge key={challengeAttempt} {...challenge} onToken={setChallengeToken} />}
+                {err("challenge")}
+                <button type="submit" disabled={pending !== null || enrollmentMode === "unavailable"} className={primaryBtn}>
                   {pending === "email" ? <Loader2 className="size-4 animate-spin" /> : <Mail className="size-4" />} {t("signin.send")}
                 </button>
               </form>
@@ -111,6 +134,7 @@ export function ResidentSignIn({ next, pendingProfile }: { next: string; pending
                 <div>
                   <h1 className="text-[24px] font-bold tracking-tight">{t("signin.title")}</h1>
                   <p className="mt-1 text-[15px] text-muted-foreground">{t("signin.sentTo", { email })}</p>
+                  {enrollmentMode === "invite" && <p className="mt-2 text-[13.5px] text-muted-foreground">{t("signin.inviteOnly")}</p>}
                 </div>
                 <label className="grid gap-1.5">
                   <span id="code-label" className="text-[14.5px] font-semibold">{t("signin.code")}</span>

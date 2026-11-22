@@ -3,16 +3,24 @@
 import type { Lang } from "@/lib/domain";
 import { failure, success, type Result } from "@/lib/result";
 import { portalIdentity } from "./identity";
+import { residentEnrollment, verifyResidentChallenge } from "./resident-enrollment";
 import { requestAuth } from "./supabase";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 const emailError = () => failure("invalid", "Enter a valid email address.", "email");
 
-export async function sendResidentCode(value: unknown): Promise<Result> {
+export async function sendResidentCode(value: unknown, challenge: unknown): Promise<Result> {
   const email = typeof value === "string" ? value.trim().toLowerCase() : "";
   if (email.length > 254 || !EMAIL.test(email)) return emailError();
+  const enrollment = residentEnrollment();
+  if (enrollment.mode === "unavailable") return failure("delivery", "Email verification isn't available right now.", "email");
+  if (enrollment.mode === "public" && !(await verifyResidentChallenge(enrollment, challenge))) {
+    return failure("challenge", "Complete the security check and try again.", "email");
+  }
   const client = await requestAuth();
-  const { error } = await client.auth.signInWithOtp({ email });
+  const { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: enrollment.mode === "public" } });
+  // Do not reveal which addresses are approved. The invite flow confirms receipt only by redeeming a code.
+  if (enrollment.mode === "invite") return success(null);
   if (error?.status === 429) return failure("rate_limit", "Wait a minute before requesting another code.", "email");
   if (error) return failure("delivery", "We couldn't request a code right now. Try again shortly.", "email");
   return success(null);

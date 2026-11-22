@@ -26,18 +26,30 @@ export async function signUp(page: Page, request: APIRequestContext, start: stri
   const inbox = process.env.TUGON_TEST_MAILPIT;
   if (!inbox) throw new Error("Start the local Supabase stack and use ops/with-local-supabase.mjs");
   const email = `resident-${randomUUID()}@example.com`;
+  const { admin } = localServices();
+  const { error } = await admin.auth.admin.createUser({ email, email_confirm: true });
+  if (error) throw new Error(`Could not provision local resident fixture (${error.code})`);
   await page.goto(start);
   await page.getByRole("radio", { name: "EN" }).last().click();
   const emailField = page.getByRole("textbox", { name: "Email", exact: true });
   const send = page.getByRole("button", { name: "Send code" });
+  const field = page.getByRole("textbox", { name: "6-digit code from your email", exact: true });
   if (verifyErrors) {
     await emailField.fill("invalid-address");
     await send.click();
     await expect(page.getByRole("alert").filter({ hasText: "Enter a valid email address." })).toBeVisible();
+    const unapproved = `unapproved-${randomUUID()}@example.com`;
+    await emailField.fill(unapproved);
+    await send.click();
+    await expect(field).toBeVisible();
+    await expect(page.getByText("Sign-in is currently limited to approved email addresses.", { exact: false })).toBeVisible();
+    const search = await request.get(`${inbox}/api/v1/search`, { params: { query: `to:${unapproved}` } });
+    expect(search.ok()).toBe(true);
+    expect((await search.json()).messages ?? []).toEqual([]);
+    await page.getByRole("button", { name: "Change email" }).click();
   }
   await emailField.fill(email);
   await send.click();
-  const field = page.getByRole("textbox", { name: "6-digit code from your email", exact: true });
   await expect(field).toBeVisible();
   let message = await latestCode(request, inbox, email);
   if (verifyErrors) {
@@ -51,7 +63,7 @@ export async function signUp(page: Page, request: APIRequestContext, start: stri
     try {
       // Move the disposable account beyond GoTrue's expiry and resend window.
       const aged = await db.query(
-        "update auth.users set confirmation_sent_at = now() - interval '1 day' where email = $1 and email_confirmed_at is null",
+        "update auth.users set recovery_sent_at = now() - interval '1 day' where email = $1 and email_confirmed_at is not null",
         [email],
       );
       expect(aged.rowCount).toBe(1);
